@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Group() {
     return (
@@ -7,14 +8,14 @@ export default function Group() {
             <div>
                 <ul className="flex flex-col gap-3">
                     {Array.from({ length: 5 }).map((_, index) => (
-                        <li key={index} className="flex items-start gap-4">
+                        <Link href="/groups/slug" key={index} className="flex items-start gap-4">
                             <div className="w-full h-16 rounded-sm bg-[url('/beach-bg.jpg')] bg-cover bg-center flex px-4 py-2">
                                 <div className="bg-black bg-opacity-20 rounded-sm p-2 w-full">
                                     <h4 className="font-bold text-lg text-white mb-[-10px]">Praia dos Amigos</h4>
                                     <span className="text-sm text-gray-200">Criado em: 16/12/24</span>
                                 </div>
                             </div>
-                        </li>
+                        </Link>
                     ))}
                 </ul>
             </div>

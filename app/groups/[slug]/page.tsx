@@ -1,3 +1,4 @@
+import { CreateExpenseDialog } from '@/components/createExpenseDialog';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import React from 'react'
@@ -6,10 +7,12 @@ import { FaArrowLeft } from 'react-icons/fa6';
 function GroupPage() {
     return (
         <div className="flex flex-col justify-center p-4 gap-3">
-            <div>
-                <Button className="flex items-center gap-2">
+            <div className='flex justify-between items-center'>
+                <Button>
                     <FaArrowLeft />
                 </Button>
+
+                <CreateExpenseDialog />
             </div>
             <h3 className='text-2xl font-semibold'>Praia Itapema</h3>
             <div className="max-w-screen-lg w-full bg-white rounded-lg shadow-md p-3 flex items-start space-x-4 bg-[url('/beach-bg.jpg')] bg-cover bg-center">
@@ -33,7 +36,7 @@ function GroupPage() {
                                 You owe <strong>R$ 12,55 </strong>
                             </span>
                             <span className="text-green-300">
-                                You'll get <strong>R$ 49,35</strong>
+                                You&apos;ll get <strong>R$ 49,35</strong>
                             </span>
                         </div>
                     </div>
