@@ -1,12 +1,5 @@
 import { NextResponse } from "next/server";
-
-enum ApiErrorCodes {
-    "INVALID_REQUEST",
-    "UNAUTHORIZED",
-    "NOT_FOUND",
-    "SERVER_ERROR",
-    "UNKNOWN"
-}
+import { ApiErrorCodes } from "./types";
 
 export type ApiError = {
   code: ApiErrorCodes;

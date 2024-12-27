@@ -25,3 +25,4 @@ Functionalities
 [] Create mockup for group and expenses
 [] Create tests for functionalities
 [] Create a stack in sessionStorage for navigation (go back arrows)
+[] Login and Register (using middleware)
