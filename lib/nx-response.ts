@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { ApiErrorCodes } from "./types";
 
 export type ApiError = {
   code: ApiErrorCodes;
@@ -40,11 +39,11 @@ class NxResponseBuilder {
   }
 
   /**
-   * 
+   *
    * @param message A message to be displayed to the user
    * @param data Any data to be returned to the user
    * @param statusCode The status code to be returned to the user
-   * @returns 
+   * @returns
    */
   success<T>(
     message: string,
@@ -55,11 +54,11 @@ class NxResponseBuilder {
   }
 
   /**
-   * 
+   *
    * @param message A message to be displayed to the user
    * @param error - {code: string, details: string | null}
    * @param statusCode The status code to be returned to the user
-   * @returns 
+   * @returns
    */
   fail(
     message: string,
