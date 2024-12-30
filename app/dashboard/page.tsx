@@ -26,7 +26,7 @@ export default function Dashboard() {
               You owe <strong>R$ 12,55 </strong>
             </span>
             <span className="text-green-400">
-              You'll get <strong>R$ 49,35</strong>
+              You&apos;ll get <strong>R$ 49,35</strong>
             </span>
           </div>
         </div>

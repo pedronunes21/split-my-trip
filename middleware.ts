@@ -1,12 +1,9 @@
-import { NxResponse } from "./lib/nx-response";
+import NextAuth from "next-auth";
+import { authConfig } from "./auth.config";
 
-export function middleware() {
-  return NxResponse.fail("You are not authorized to access this page", {
-    code: ApiErrorCodes.UNAUTHORIZED,
-    details: "You need to be logged in to access this page",
-  });
-}
+export default NextAuth(authConfig).auth;
 
 export const config = {
-  matcher: [],
+  // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };
