@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "dev:seed": "concurrently \"next dev --turbopack\"",    
+    "dev:seed": "concurrently \"next dev --turbopack\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -16,7 +16,9 @@
     "@radix-ui/react-slot": "^1.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^16.4.7",
     "lucide-react": "^0.469.0",
+    "mongodb": "^6.12.0",
     "next": "15.1.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
