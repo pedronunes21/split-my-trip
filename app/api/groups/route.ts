@@ -1,30 +1,33 @@
-import { connectToDatabase } from "@/lib/db";
+import { NxResponse } from "@/lib/nx-response";
+import { db } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 
+const client = await db.connect();
+
 export async function GET() {
-  const { database } = await connectToDatabase();
-  const groupsCollection = database.collection("groups");
+  // const { database } = await connectToDatabase();
+  // const groupsCollection = database.collection("groups");
 
-  const groups = await groupsCollection.find().toArray();
+  // const groups = await groupsCollection.find().toArray();
 
-  return NextResponse.json(groups);
+  // return NextResponse.json(groups);
+
+  const groups = await client.sql`SELECT * FROM groups`;
+
+  return NextResponse.json({
+    groups: groups.rows,
+  });
 }
 
 export async function POST(request: Request) {
-  const { database } = await connectToDatabase();
-  const groupsCollection = database.collection("groups");
-
   const data = await request.json();
 
-  const newGroup = {
-    ...data,
-    createdAt: new Date(),
-  };
+  const { title } = data;
 
-  await groupsCollection.insertOne(newGroup);
+  await client.sql`
+    INSERT INTO groups (title)
+    VALUES (${title})
+  `;
 
-  return NextResponse.json({
-    message: "Group created!",
-    data: newGroup,
-  });
+  return NxResponse.success("Group created successfully.", {});
 }
