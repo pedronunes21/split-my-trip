@@ -1,3 +1,4 @@
+import { ApiErrorCodes } from "@/types/global";
 import { NextResponse } from "next/server";
 
 export type ApiError = {

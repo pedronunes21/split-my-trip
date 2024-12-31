@@ -26,3 +26,11 @@ Functionalities
 [] Create tests for functionalities
 [] Create a stack in sessionStorage for navigation (go back arrows)
 [] Login and Register (using middleware)
+
+Fix:
+[] Seed is not working
+[x] Authentication is not working
+[] Set all databases up with code
+[] Return ID on user's object
+[] Private pages except for "/", "/auth/login" and "/auth/register"
+[] See the proper way to handle errors

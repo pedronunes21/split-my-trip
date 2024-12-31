@@ -5,13 +5,6 @@ import { NextResponse } from "next/server";
 const client = await db.connect();
 
 export async function GET() {
-  // const { database } = await connectToDatabase();
-  // const groupsCollection = database.collection("groups");
-
-  // const groups = await groupsCollection.find().toArray();
-
-  // return NextResponse.json(groups);
-
   const groups = await client.sql`SELECT * FROM groups`;
 
   return NextResponse.json({
@@ -20,9 +13,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const data = await request.json();
-
-  const { title } = data;
+  const { title } = await request.json();
 
   await client.sql`
     INSERT INTO groups (title)
