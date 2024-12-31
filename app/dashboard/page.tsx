@@ -20,6 +20,7 @@ export default async function Dashboard() {
           <div className="hidden md:block">Sign Out</div>
         </button>
       </form>
+
       <div className="max-w-screen-lg w-full bg-white rounded-lg shadow-md p-3 flex items-start space-x-4">
         <div className="flex-shrink-0">
           <Image
