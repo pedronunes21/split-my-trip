@@ -31,6 +31,23 @@ Fix:
 [] Seed is not working
 [x] Authentication is not working
 [] Set all databases up with code
-[] Return ID on user's object
+[x] Return ID on user's object
 [] Private pages except for "/", "/auth/login" and "/auth/register"
 [] See the proper way to handle errors
+
+## Process
+
+1. Button for starting a trip
+2. Fill in trip's name, trip's picture, your name and your picture
+3. Generates a QRCode and an invitation link
+4. Friends scan the QRCode or access the invitation link
+5. They are then redirected to a page to fill name and picture
+6. Save information on Postgres and the information with ID on LocalStorage or IndexedDB.
+7. Make operation with user's ID. Check only if user is part of a group
+
+** Eliminate the need to create a formal account
+** If the LocalStorage is cleared, the access to the account is lost
+
+- The group has a "admin" field with the ID of the user who created it
+- Admin user can remove people from group. Anyone can create an expense
+- Create pages as /[group_id]/:path\*

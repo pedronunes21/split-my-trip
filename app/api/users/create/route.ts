@@ -2,7 +2,6 @@ import { User } from "@/lib/definitions";
 import { NxResponse } from "@/lib/nx-response";
 import { ApiErrorCodes } from "@/types/global";
 import { db } from "@vercel/postgres";
-import bcrypt from "bcryptjs";
 
 const client = await db.connect();
 
@@ -34,11 +33,9 @@ export async function POST(request: Request) {
     });
   }
 
-  const hashedPassword = bcrypt.hashSync(password, 10);
-
   await client.sql`
     INSERT INTO users (name, email, password)
-    VALUES (${name}, ${email}, ${hashedPassword})
+    VALUES (${name}, ${email}, ${password})
   `;
 
   return NxResponse.success("User created.", {});

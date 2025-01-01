@@ -1,26 +1,9 @@
-import { auth, signOut } from "@/auth";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { HiPower } from "react-icons/hi2";
 
 export default async function Dashboard() {
-  const session = await auth();
-  console.log(session);
-
   return (
     <div className="flex flex-col justify-center p-4 gap-3">
-      <form
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <button className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3">
-          <HiPower className="w-6" />
-          <div className="hidden md:block">Sign Out</div>
-        </button>
-      </form>
-
       <div className="max-w-screen-lg w-full bg-white rounded-lg shadow-md p-3 flex items-start space-x-4">
         <div className="flex-shrink-0">
           <Image
