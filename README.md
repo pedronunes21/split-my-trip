@@ -30,7 +30,7 @@ Functionalities
 Fix:
 [] Seed is not working
 [x] Authentication is not working
-[] Set all databases up with code
+[x] Set all databases up with code
 [x] Return ID on user's object
 [] Private pages except for "/", "/auth/login" and "/auth/register"
 [] See the proper way to handle errors

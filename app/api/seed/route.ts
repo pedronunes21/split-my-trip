@@ -1,7 +1,8 @@
 // import { placeholderUsers } from "@/lib/placeholder-data";
 import { db } from "@vercel/postgres";
+import { NextResponse } from "next/server";
 
-async function seedUsers() {
+export async function POST() {
   const client = await db.connect();
 
   // Drop all tables
@@ -34,6 +35,10 @@ async function seedUsers() {
     );
   `;
 
+  return NextResponse.json({
+    message: "Tables created successfully.",
+  });
+
   // await Promise.all(
   //   placeholderUsers.map(async (user) => {
   //     return client.sql`
@@ -44,5 +49,3 @@ async function seedUsers() {
   //   })
   // );
 }
-
-seedUsers();
