@@ -1,10 +1,13 @@
-const placeholderUsers = [
+const placeholderGroups = [
   {
-    id: "410544b2-4001-4271-9855-fec4b6a6442a",
-    name: "User",
-    email: "user@nextmail.com",
-    password: "123456",
+    title: "Praia Itapema",
+    photo_url:
+      "https://img.freepik.com/free-vector/hand-drawn-summer-background-videocalls_23-2148944813.jpg",
+    user: {
+      name: "Pedro",
+      photo_url: "https://github.com/pedronunes21.png",
+    },
   },
 ];
 
-export { placeholderUsers };
+export { placeholderGroups };

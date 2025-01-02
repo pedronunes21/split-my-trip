@@ -1,4 +1,4 @@
-// import { placeholderUsers } from "@/lib/placeholder-data";
+import { placeholderGroups } from "@/lib/placeholder-data";
 import { db } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 
@@ -19,6 +19,7 @@ export async function POST() {
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       photo_url TEXT NOT NULL,
+      group_id UUID,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
@@ -30,22 +31,55 @@ export async function POST() {
       title VARCHAR(255) NOT NULL,
       admin_id UUID,
       photo_url TEXT NOT NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      CONSTRAINT fk_admin FOREIGN KEY (admin_id) REFERENCES users(id)
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
 
-  return NextResponse.json({
-    message: "Tables created successfully.",
-  });
+  // Adding foreign keys to Users and Groups tables
+  await client.sql`
+    ALTER TABLE users ADD CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id);
+    ALTER TABLE groups ADD CONSTRAINT fk_admin FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE;
+  `;
 
-  // await Promise.all(
-  //   placeholderUsers.map(async (user) => {
-  //     return client.sql`
-  //       INSERT INTO users (id, name, email, password)
-  //       VALUES (${user.id}, ${user.name}, ${user.email}, ${user.password})
-  //       ON CONFLICT (id) DO NOTHING;
-  //     `;
-  //   })
-  // );
+  // Create Invitations table
+  await client.sql`
+    CREATE TABLE IF NOT EXISTS invitations (
+      id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+      group_id UUID,
+      code VARCHAR(8) DEFAULT substring(gen_random_uuid()::text from 1 for 8),
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id)
+    );
+  `;
+
+  await Promise.all(
+    placeholderGroups.map(async (group) => {
+      const g = await client.sql`
+        WITH new_group AS (
+          INSERT INTO groups (title, photo_url)
+          VALUES (${group.title}, ${group.photo_url})
+          RETURNING id AS group_id
+        ),
+        new_user AS (
+          INSERT INTO users (name, photo_url, group_id)
+          SELECT 'Example User', 'user.jpg', group_id
+          FROM new_group
+          RETURNING id AS user_id
+        )
+        SELECT new_group.group_id, new_user.user_id FROM new_group, new_user
+      `;
+
+      const { group_id, user_id } = g.rows[0];
+
+      await client.sql`
+        UPDATE groups
+        SET admin_id = ${user_id}
+        WHERE id = ${group_id}
+      `;
+    })
+  );
+
+  return NextResponse.json({
+    message: "Tables created successfully and database seeded.",
+  });
 }

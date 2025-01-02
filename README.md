@@ -8,8 +8,7 @@ Screens
 [] To edit a group
 [] To delete a group
 [] Summary (to see how much you owe and how much people owe you) (by group)
-[] Profile
-[] Login and Register
+[] Profile?
 [] Homepage
 
 Functionalities
@@ -18,21 +17,17 @@ Functionalities
 [] Buttons for navigation (go back a page)
 [] Bottom Bar
 [] Button to delete your own expense
-[] Add people to groups
 [] Send notification when you participate in a expense
 [] Create illustrations for the groups banner
 [] Finish a trip
-[] Create mockup for group and expenses
 [] Create tests for functionalities
 [] Create a stack in sessionStorage for navigation (go back arrows)
-[] Login and Register (using middleware)
 
 Fix:
-[] Seed is not working
+[x] Seed is not working
 [x] Authentication is not working
 [x] Set all databases up with code
 [x] Return ID on user's object
-[] Private pages except for "/", "/auth/login" and "/auth/register"
 [] See the proper way to handle errors
 
 ## Process
@@ -51,3 +46,10 @@ Fix:
 - The group has a "admin" field with the ID of the user who created it
 - Admin user can remove people from group. Anyone can create an expense
 - Create pages as /[group_id]/:path\*
+
+## Tables
+
+- Groups
+- Users
+- Invitations
+- Expenses
