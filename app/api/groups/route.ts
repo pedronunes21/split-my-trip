@@ -1,19 +1,22 @@
 import { NxResponse } from "@/lib/nx-response";
+import { GroupRequest } from "@/types/requests";
+import { GroupResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextResponse } from "next/server";
 
 const client = await db.connect();
 
 export async function GET() {
-  const groups = await client.sql`SELECT * FROM groups`;
+  const res = await client.sql`SELECT * FROM groups`;
+  const groups = res.rows as GroupResponse[];
 
   return NextResponse.json({
-    groups: groups.rows,
+    groups: groups,
   });
 }
 
 export async function POST(request: Request) {
-  const { title, photo_url, user } = await request.json();
+  const { title, photo_url, user }: GroupRequest = await request.json();
 
   try {
     const g = await client.sql`

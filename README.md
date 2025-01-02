@@ -29,6 +29,7 @@ Fix:
 [x] Set all databases up with code
 [x] Return ID on user's object
 [] See the proper way to handle errors
+[] Throw errors
 
 ## Process
 

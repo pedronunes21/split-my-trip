@@ -1,42 +1,37 @@
-import { User } from "@/lib/definitions";
 import { NxResponse } from "@/lib/nx-response";
-import { ApiErrorCodes } from "@/types/global";
+import { UserRequest } from "@/types/requests";
+import { InvitationResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 
 const client = await db.connect();
 
-async function getUserByEmail(email: string) {
-  try {
-    const user = await client.sql<User>`
-      SELECT * 
-      FROM users
-      WHERE email=${email}
-  `;
-    return user.rows[0];
-  } catch (error) {
-    console.error("Failed to fetch user:", error);
-    throw new Error("Failed to fetch user.");
-  }
-
-  return undefined;
-}
-
 export async function POST(request: Request) {
-  const { name, email, password } = await request.json();
+  const { name, photo_url, invite_code }: UserRequest = await request.json();
 
-  const existingUser = await getUserByEmail(email);
+  try {
+    const invitation = (
+      await client.sql`
+      SELECT group_id
+      FROM invitations
+      WHERE invite_code = ${invite_code}
+    `
+    ).rows[0] as InvitationResponse;
 
-  if (existingUser) {
-    return NxResponse.fail("User already exists.", {
-      code: ApiErrorCodes.CONFLICT,
-      details: null,
+    if (!invitation) {
+      throw new Error("Invalid invitation code.");
+    }
+
+    const user = await client.sql`
+      INSERT INTO users (name, photo_url, group_id)
+      VALUES (${name}, ${photo_url}, ${invitation.group_id})
+      RETURNING id
+    `;
+
+    return NxResponse.success("User created successfully.", {
+      userId: user.rows[0].id,
     });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong! Try again later.");
   }
-
-  await client.sql`
-    INSERT INTO users (name, email, password)
-    VALUES (${name}, ${email}, ${password})
-  `;
-
-  return NxResponse.success("User created.", {});
 }

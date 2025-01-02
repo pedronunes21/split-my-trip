@@ -46,7 +46,7 @@ export async function POST() {
     CREATE TABLE IF NOT EXISTS invitations (
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       group_id UUID,
-      code VARCHAR(8) DEFAULT substring(gen_random_uuid()::text from 1 for 8),
+      invite_code VARCHAR(8) DEFAULT substring(gen_random_uuid()::text from 1 for 8),
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id)
     );
@@ -75,6 +75,11 @@ export async function POST() {
         UPDATE groups
         SET admin_id = ${user_id}
         WHERE id = ${group_id}
+      `;
+
+      await client.sql`
+        INSERT INTO invitations (group_id)
+        VALUES (${group_id})
       `;
     })
   );
