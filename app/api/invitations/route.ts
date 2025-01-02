@@ -1,14 +1,17 @@
 import { NxResponse } from "@/lib/nx-response";
-import { InvitationRequest } from "@/types/requests";
 import { InvitationResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
+import { NextRequest } from "next/server";
 
 const client = await db.connect();
 
-export async function POST(request: Request) {
-  const { group_id }: InvitationRequest = await request.json();
-
+export async function POST(request: NextRequest) {
   try {
+    const group_id = request.cookies.get("group_id")?.value;
+
+    if (!group_id) {
+      throw new Error("Group ID not found or invalid.");
+    }
     await client.sql`
       DELETE FROM invitations
       WHERE group_id = ${group_id}

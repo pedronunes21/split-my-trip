@@ -1,18 +1,32 @@
-import { NxResponse } from "@/lib/nx-response";
 import { GroupRequest } from "@/types/requests";
 import { GroupResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const client = await db.connect();
 
-export async function GET() {
-  const res = await client.sql`SELECT * FROM groups`;
-  const groups = res.rows as GroupResponse[];
+export async function GET(request: NextRequest) {
+  try {
+    const group_id = request.cookies.get("group_id")?.value;
 
-  return NextResponse.json({
-    groups: groups,
-  });
+    if (!group_id) {
+      throw new Error("Group ID not found or invalid.");
+    }
+
+    const res = await client.sql`
+      SELECT * 
+      FROM groups
+      WHERE id = ${group_id}
+    `;
+    const groups = res.rows[0] as GroupResponse;
+
+    return NextResponse.json({
+      groups: groups,
+    });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong! Try again later.");
+  }
 }
 
 export async function POST(request: Request) {
@@ -42,10 +56,25 @@ export async function POST(request: Request) {
       WHERE id = ${group_id}
     `;
 
-    return NxResponse.success("Group created successfully.", {
-      group_id,
-      user_id,
+    const response = NextResponse.json({
+      message: "Group created successfully.",
+      data: {
+        group_id,
+        user_id,
+      },
     });
+
+    response.cookies.set("group_id", group_id, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+
+    response.cookies.set("user_id", user_id, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+
+    return response;
   } catch (err) {
     console.log(err);
     return NextResponse.json({
