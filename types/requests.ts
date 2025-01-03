@@ -16,3 +16,11 @@ export type UserRequest = {
   photo_url: string;
   invite_code: string;
 };
+
+export type ExpenseRequest = {
+  payer: string; // user_id
+  amount: number; // total amount
+  description: string;
+  date: Date;
+  participants: string[];
+};

@@ -1,7 +1,6 @@
-import { NxResponse } from "@/lib/nx-response";
 import { InvitationResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const client = await db.connect();
 
@@ -25,8 +24,11 @@ export async function POST(request: NextRequest) {
 
     const { invite_code } = res.rows[0] as InvitationResponse;
 
-    return NxResponse.success("Invitation created successfully.", {
-      invite_code,
+    return NextResponse.json({
+      message: "Invitation created successfully.",
+      data: {
+        invite_code,
+      },
     });
   } catch (err) {
     console.log(err);

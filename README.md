@@ -28,8 +28,8 @@ Fix:
 [x] Authentication is not working
 [x] Set all databases up with code
 [x] Return ID on user's object
-[] See the proper way to handle errors
-[] Throw errors
+[x] See the proper way to handle errors
+[x] Throw errors
 
 ## Process
 
