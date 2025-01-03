@@ -72,18 +72,20 @@ const schema = yup.object().shape({
 export default function Page() {
   const [banner, setBanner] = useState("Nenhuma");
   const [icon, setIcon] = useState("Nenhum");
+  const [isLoading, setLoading] = useState(false);
 
   const { toast } = useToast();
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isLoading },
+    formState: { errors },
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true);
     const { group_title, group_banner_index, user_name, user_image_index } =
       data;
     const group_banner = groupBanners[parseInt(group_banner_index)].path;
@@ -134,6 +136,8 @@ export default function Page() {
         variant: "destructive",
         title: "Ocorreu algum erro! Tente novamente mais tarde.",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
