@@ -40,6 +40,21 @@ const placeholderGroups = [
           },
         ],
       },
+      {
+        id: "becb19f6-8a24-4f49-a54a-fed0b43ce7e1",
+        amount: 150.0,
+        description: "Retroescavadeira de brinquedo para cavar.",
+        date: new Date().toISOString(),
+        payer_id: "f781b784-17bf-46b8-8da0-cb7963287636",
+        participants: [
+          {
+            user_id: "0140e285-858b-44c7-8e94-1f5a8f2d3bb0",
+          },
+          {
+            user_id: "f781b784-17bf-46b8-8da0-cb7963287636",
+          },
+        ],
+      },
     ],
   },
 ];

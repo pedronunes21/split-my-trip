@@ -17,3 +17,11 @@ export type UserResponse = {
   photo_url: string;
   group_id: string;
 };
+
+export type ExpensesSummaryResponse = {
+  user_id: string;
+  user_name: string;
+  debt: string;
+  surplus: string;
+  balance: string;
+};

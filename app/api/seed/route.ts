@@ -62,7 +62,9 @@ export async function POST() {
         description TEXT,
         date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         payer_id UUID,
-        CONSTRAINT fk_payer FOREIGN KEY (payer_id) REFERENCES users(id)
+        group_id UUID,
+        CONSTRAINT fk_payer FOREIGN KEY (payer_id) REFERENCES users(id),
+        CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id)
       );
     `;
 
@@ -71,7 +73,7 @@ export async function POST() {
       CREATE TABLE IF NOT EXISTS expenses_participants (
         expense_id UUID,
         user_id UUID,
-        contribution_amount DECIMAL(10,2),
+        amount_owed DECIMAL(10,2),
         PRIMARY KEY (expense_id, user_id),
         CONSTRAINT fk_expense FOREIGN KEY (expense_id) REFERENCES expenses(id),
         CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
@@ -125,8 +127,8 @@ export async function POST() {
           // Create the expense
           const e = (
             await client.sql`
-            INSERT INTO expenses (id, amount, description, date, payer_id)
-            VALUES (${expense.id}, ${expense.amount}, ${expense.description}, ${expense.date}, ${user_id})
+            INSERT INTO expenses (id, amount, description, date, payer_id, group_id)
+            VALUES (${expense.id}, ${expense.amount}, ${expense.description}, ${expense.date}, ${expense.payer_id}, ${group_id})
             RETURNING id, amount;
           `
           ).rows[0];
@@ -136,7 +138,7 @@ export async function POST() {
           // Add participants to the expense
           expense.participants.map(async (p) => {
             await client.sql`
-              INSERT INTO expenses_participants (expense_id, user_id, contribution_amount)
+              INSERT INTO expenses_participants (expense_id, user_id, amount_owed)
               VALUES (${e.id}, ${p.user_id}, ${(
               parseFloat(e.amount) / participants
             ).toFixed(2)})

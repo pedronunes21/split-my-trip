@@ -18,9 +18,9 @@ export type UserRequest = {
 };
 
 export type ExpenseRequest = {
-  payer: string; // user_id
   amount: number; // total amount
   description: string;
-  date: Date;
+  date: string;
+  payer_id: string; // user_id
   participants: string[];
 };
