@@ -1,4 +1,4 @@
-import { ExpensesSummaryResponse } from "@/types/responses";
+import { ExpensesOverviewResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       WHERE u.group_id = ${group_id}
       GROUP BY u.id;
     `
-    ).rows as ExpensesSummaryResponse[];
+    ).rows as ExpensesOverviewResponse[];
 
     return NextResponse.json({
       data: expensesSummary,

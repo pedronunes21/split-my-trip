@@ -18,10 +18,17 @@ export type UserResponse = {
   group_id: string;
 };
 
-export type ExpensesSummaryResponse = {
+export type ExpensesOverviewResponse = {
   user_id: string;
   user_name: string;
   debt: string;
   surplus: string;
   balance: string;
+};
+
+export type ExpensesDetailsResponse = {
+  ower_id: string;
+  ower: string;
+  payer: string;
+  amount_owed: string;
 };
