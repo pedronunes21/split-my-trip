@@ -1,66 +1,52 @@
 "use client";
-import ExpenseCard from "@/components/expenseCard";
+import { ExpenseCard, ExpenseCardSkeleton } from "@/components/expenseCard";
+import ExpensesOverview from "@/components/expensesOverview";
+import ScreenLoading from "@/components/screenLoading";
 import { Button } from "@/components/ui/button";
 import fetcher from "@/lib/fetcher";
-import { ExpenseHistoryResponse, GroupResponse } from "@/types/responses";
-import Image from "next/image";
+import {
+  ExpenseHistoryResponse,
+  ExpensesOverviewResponse,
+  GroupResponse,
+} from "@/types/responses";
 import { Suspense } from "react";
 import useSWR from "swr";
 
 export default function Dashboard() {
   const groups = useSWR<{ data: GroupResponse }, Error>("/api/groups", fetcher);
 
-  const expenses = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
+  const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
     "api/expenses/history",
     fetcher
   );
 
-  if (groups.error || expenses.error) return <div>Failed to load</div>;
-  if (!groups.data) return <div>Loading...</div>;
+  const expensesOverview = useSWR<{ data: ExpensesOverviewResponse }, Error>(
+    "api/expenses/overview?me=true",
+    fetcher
+  );
 
-  console.log(expenses.data);
+  if (groups.error || expensesHistory.error || expensesOverview.error)
+    return <div>Failed to load</div>;
+
+  if (!groups.data) return <ScreenLoading />;
+
+  console.log(expensesOverview.data);
 
   return (
     <div className="flex flex-col justify-center p-4 gap-3">
       <h3 className="text-2xl font-semibold">{groups.data.data.title}</h3>
-      <div
-        style={{ backgroundImage: `url(${groups.data.data.photo_url})` }}
-        className="max-w-screen-lg w-full bg-white rounded-lg shadow-md p-3 flex items-start space-x-4 bg-cover bg-center"
-      >
-        <div className="flex items-start space-x-4 bg-black bg-opacity-30 rounded-sm p-2 w-full">
-          <div className="flex-shrink-0">
-            <Image
-              className="h-16 w-16 rounded-full"
-              src="/avatar.webp"
-              alt="Profile Picture"
-              width={64}
-              height={64}
-            />
-          </div>
-          <div>
-            <div className="flex flex-col">
-              <span className="text-sm font-regular text-gray-200">Total</span>
-              <strong className="text-3xl font-semibold text-white">
-                R$ 36,90
-              </strong>
-            </div>
-            <div className="flex flex-col pt-3 pl-3">
-              <span className="text-red-300">
-                Você deve <strong>R$ 12,55 </strong>
-              </span>
-              <span className="text-green-300">
-                À receber <strong>R$ 49,35</strong>
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <ExpensesOverview
+        balance={expensesOverview.data?.data.balance}
+        debt={expensesOverview.data?.data.debt}
+        surplus={expensesOverview.data?.data.surplus}
+        group_photo={groups.data.data.photo_url}
+        user_photo="/avatar/avatar1.jpg"
+      />
       <div>
         <h3 className="text-lg font-semibold pb-2">Gastos recentes</h3>
         <ul className="flex flex-col gap-3">
-          <Suspense fallback={<div>Loading...</div>}>
-            {expenses.data?.data.map((expense) => (
+          <Suspense fallback={<ExpenseCardSkeleton />}>
+            {expensesHistory.data?.data.map((expense) => (
               <ExpenseCard
                 key={expense.id}
                 user_name={expense.user.name}

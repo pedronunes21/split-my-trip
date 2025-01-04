@@ -24,8 +24,14 @@ Functionalities
 [] Create a stack in sessionStorage for navigation (go back arrows)
 
 Fix:
-[] Throw errors with NextResponse.json with status
+[x] Throw errors with NextResponse.json with status
 [] Pass cookies in server side fetch
+[] Open dialog when user clicks on an expense, with more information
+[x] If expense was in the same day, show only time, else, show date
+[x] Filter summary to user
+[] Create screen for error, when fetch went wrong
+[] Pagination
+[] Redirect user to register if not logged in and try to access private page
 
 ## Process
 
