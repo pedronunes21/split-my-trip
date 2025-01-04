@@ -3,14 +3,16 @@ import { GroupResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
+  const client = await db.connect();
   try {
     const group_id = request.cookies.get("group_id")?.value;
 
     if (!group_id) {
-      throw new Error("Group ID not found or invalid.");
+      return NextResponse.json(
+        { error: "Group ID not found or invalid." },
+        { status: 404 }
+      );
     }
 
     const res = await client.sql`
@@ -21,15 +23,21 @@ export async function GET(request: NextRequest) {
     const groups = res.rows[0] as GroupResponse;
 
     return NextResponse.json({
-      groups: groups,
+      data: groups,
     });
   } catch (err) {
     console.log(err);
-    throw new Error("Something went wrong! Try again later.");
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
   }
 }
 
 export async function POST(request: Request) {
+  const client = await db.connect();
   const { title, photo_url, user }: GroupRequest = await request.json();
 
   try {
@@ -77,8 +85,11 @@ export async function POST(request: Request) {
     return response;
   } catch (err) {
     console.log(err);
-    return NextResponse.json({
-      message: "Check the fields and try again.",
-    });
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
   }
 }

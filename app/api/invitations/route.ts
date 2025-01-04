@@ -2,15 +2,18 @@ import { InvitationResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function POST(request: NextRequest) {
-  try {
-    const group_id = request.cookies.get("group_id")?.value;
+  const client = await db.connect();
+  const group_id = request.cookies.get("group_id")?.value;
 
-    if (!group_id) {
-      throw new Error("Group ID not found or invalid.");
-    }
+  if (!group_id) {
+    return NextResponse.json(
+      { error: "Group ID not found or invalid." },
+      { status: 404 }
+    );
+  }
+
+  try {
     await client.sql`
       DELETE FROM invitations
       WHERE group_id = ${group_id}
@@ -32,6 +35,11 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     console.log(err);
-    throw new Error("Something went wrong! Try again later.");
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
   }
 }

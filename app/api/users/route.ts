@@ -3,13 +3,15 @@ import { InvitationResponse, UserResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
+  const client = await db.connect();
   const group_id = request.cookies.get("group_id")?.value;
 
   if (!group_id) {
-    throw new Error("Group ID not found or invalid.");
+    return NextResponse.json(
+      { error: "Group ID not found or invalid." },
+      { status: 404 }
+    );
   }
 
   try {
@@ -24,11 +26,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(users);
   } catch (err) {
     console.log(err);
-    throw new Error("Something went wrong! Try again later.");
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
   }
 }
 
 export async function POST(request: Request) {
+  const client = await db.connect();
   const { name, photo_url, invite_code }: UserRequest = await request.json();
 
   try {
@@ -70,6 +78,11 @@ export async function POST(request: Request) {
     return response;
   } catch (err) {
     console.log(err);
-    throw new Error("Something went wrong! Try again later.");
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
   }
 }

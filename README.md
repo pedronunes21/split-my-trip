@@ -24,12 +24,8 @@ Functionalities
 [] Create a stack in sessionStorage for navigation (go back arrows)
 
 Fix:
-[x] Seed is not working
-[x] Authentication is not working
-[x] Set all databases up with code
-[x] Return ID on user's object
-[x] See the proper way to handle errors
-[x] Throw errors
+[] Throw errors with NextResponse.json with status
+[] Pass cookies in server side fetch
 
 ## Process
 

@@ -4,7 +4,7 @@ import Image from "next/image";
 import React from "react";
 import { FaArrowLeft } from "react-icons/fa6";
 
-function GroupPage() {
+async function GroupPage() {
   return (
     <div className="flex flex-col justify-center p-4 gap-3">
       <div className="flex justify-between items-center">

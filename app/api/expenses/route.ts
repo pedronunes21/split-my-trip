@@ -2,24 +2,18 @@ import { ExpenseRequest } from "@/types/requests";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
-export async function GET(request: NextRequest) {
-  const group_id = request.cookies.get("group_id")?.value;
-
-  if (!group_id) {
-    throw new Error("Group ID not found or invalid.");
-  }
-}
-
 export async function POST(request: NextRequest) {
+  const client = await db.connect();
   const { participants, payer_id, amount, description, date }: ExpenseRequest =
     await request.json();
 
   const group_id = request.cookies.get("group_id")?.value;
 
   if (!group_id) {
-    throw new Error("Group ID not found or invalid.");
+    return NextResponse.json(
+      { error: "Group ID not found or invalid." },
+      { status: 404 }
+    );
   }
 
   try {
@@ -45,6 +39,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: "Expense created successfully." });
   } catch (err) {
     console.log(err);
-    throw new Error("Something went wrong! Try again later.");
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
   }
 }

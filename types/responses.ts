@@ -32,3 +32,15 @@ export type ExpensesDetailsResponse = {
   payer: string;
   amount_owed: string;
 };
+
+export type ExpenseHistoryResponse = {
+  id: string;
+  date: string;
+  amount: string;
+  payer_id: string;
+  description: string;
+  user: {
+    name: string;
+    photo_url: string;
+  };
+};
