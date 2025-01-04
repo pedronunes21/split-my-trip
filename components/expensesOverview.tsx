@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Suspense } from "react";
 import { Skeleton } from "./ui/skeleton";
 
 type ExpensesOverviewProps = {
@@ -29,24 +28,36 @@ export default function ExpensesOverview(props: ExpensesOverviewProps) {
         <div>
           <div className="flex flex-col">
             <span className="text-sm font-regular text-gray-200">Total</span>
-            <Suspense fallback={<Skeleton className="h-6 w-8" />}>
+            {props.balance ? (
               <strong className="text-3xl font-semibold text-white">
-                R$ {props.balance?.replace(".", ",")}
+                R$ {parseFloat(props.balance).toFixed(2).replace(".", ",")}
               </strong>
-            </Suspense>
+            ) : (
+              <Skeleton className="h-6 w-8" />
+            )}
           </div>
           <div className="flex flex-col pt-3 pl-3">
-            <Suspense fallback={<Skeleton className="h-2 w-full" />}>
+            {props.debt ? (
               <span className="text-red-300">
-                Você deve <strong>R$ {props.debt?.replace(".", ",")} </strong>
+                Você deve{" "}
+                <strong>
+                  R$ {parseFloat(props.debt).toFixed(2).replace(".", ",")}{" "}
+                </strong>
               </span>
-            </Suspense>
+            ) : (
+              <Skeleton className="h-2 w-full" />
+            )}
 
-            <Suspense fallback={<Skeleton className="h-2 w-full mt-4" />}>
+            {props.surplus ? (
               <span className="text-green-300">
-                À receber <strong>R$ {props.surplus?.replace(".", ",")}</strong>
+                À receber{" "}
+                <strong>
+                  R$ {parseFloat(props.surplus).toFixed(2).replace(".", ",")}
+                </strong>
               </span>
-            </Suspense>
+            ) : (
+              <Skeleton className="h-2 w-full mt-4" />
+            )}
           </div>
         </div>
       </div>

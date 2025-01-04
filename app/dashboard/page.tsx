@@ -49,6 +49,7 @@ export default function Dashboard() {
             {expensesHistory.data?.data.map((expense) => (
               <ExpenseCard
                 key={expense.id}
+                expense_id={expense.id}
                 user_name={expense.user.name}
                 user_profile={expense.user.photo_url}
                 date={expense.date}

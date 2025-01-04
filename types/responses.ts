@@ -44,3 +44,9 @@ export type ExpenseHistoryResponse = {
     photo_url: string;
   };
 };
+
+export type ExpenseParticipants = {
+  user_id: string;
+  user_name: string;
+  user_photo: string;
+};
