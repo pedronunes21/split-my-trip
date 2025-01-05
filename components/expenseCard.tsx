@@ -52,8 +52,6 @@ export function ExpenseCard(props: ExpenseCardProps) {
   );
 
   if (participants.error) return <div>Failed to load</div>;
-
-  console.log(participants.data);
   return (
     <Dialog>
       <DialogTrigger>

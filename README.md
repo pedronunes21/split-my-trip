@@ -26,12 +26,20 @@ Functionalities
 Fix:
 [x] Throw errors with NextResponse.json with status
 [] Pass cookies in server side fetch
-[] Open dialog when user clicks on an expense, with more information
+[x] Open dialog when user clicks on an expense, with more information
 [x] If expense was in the same day, show only time, else, show date
 [x] Filter summary to user
 [] Create screen for error, when fetch went wrong
 [] Pagination
 [] Redirect user to register if not logged in and try to access private page
+[] Screen to generate qrcode and link
+[] Screen to follow qrcode and link
+[] Create expense
+[] Delete expense if was created by you
+[] Screen to show how much you owe to whom
+[] Finish a trip
+[] Add more images to banner and user icon
+[] Generate another invite code everytime the component is rendered
 
 ## Process
 

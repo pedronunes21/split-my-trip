@@ -2,7 +2,7 @@ import { InvitationResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   const client = await db.connect();
   const group_id = request.cookies.get("group_id")?.value;
 
@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
       message: "Invitation created successfully.",
       data: {
         invite_code,
+        group_id,
       },
     });
   } catch (err) {

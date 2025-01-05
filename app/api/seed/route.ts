@@ -39,8 +39,8 @@ export async function POST() {
 
     // Adding foreign keys to Users and Groups tables
     await client.sql`
-      ALTER TABLE users ADD CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id);
-      ALTER TABLE groups ADD CONSTRAINT fk_admin FOREIGN KEY (admin_id) REFERENCES users(id) ON DELETE CASCADE;
+      ALTER TABLE users ADD CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE;
+      ALTER TABLE groups ADD CONSTRAINT fk_admin FOREIGN KEY (admin_id) REFERENCES users(id);
     `;
 
     // Create Invitations table
