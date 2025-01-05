@@ -1,25 +1,19 @@
 import { InvitationResponse } from "@/types/responses";
-import {
-  DialogHeader,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "./ui/dialog";
+import { DialogDescription, DialogTitle } from "./ui/dialog";
 import { QRCodeSVG } from "qrcode.react";
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
 import { Skeleton } from "./ui/skeleton";
-import { FaClipboard } from "react-icons/fa6";
+import { FaArrowsRotate, FaClipboard } from "react-icons/fa6";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
-type InviteDialogProps = {
-  shouldFetchInvite: boolean;
-};
-
-export default function InviteDialog(props: InviteDialogProps) {
+export default function InviteDialog() {
+  const [shouldFetch, setShouldFetch] = useState(true);
   const { toast } = useToast();
+
   const invitation = useSWR<{ data: InvitationResponse }, Error>(
-    props.shouldFetchInvite ? "/api/invitations" : null,
+    shouldFetch ? "/api/invitations" : null,
     fetcher
   );
 
@@ -34,40 +28,72 @@ export default function InviteDialog(props: InviteDialogProps) {
     });
   }
 
+  async function generateInvitation() {
+    setShouldFetch(false);
+    try {
+      const res = await fetch("/api/invitations", {
+        method: "POST",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast({
+          variant: "destructive",
+          title: data.error,
+        });
+        return;
+      }
+
+      setShouldFetch(true);
+
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+      toast({
+        variant: "destructive",
+        title: "Ocorreu algum erro! Tente novamente mais tarde.",
+      });
+    }
+  }
+
   return (
-    <DialogContent className="w-[calc(100%-30px)] rounded-md">
-      <DialogHeader>
+    <main>
+      <div className="flex items-center justify-center flex-col gap-2 pt-4">
         <DialogTitle className="font-normal">Links de convite</DialogTitle>
-        <DialogDescription>
-          Compartilhe os links de convite abaixo para convidar seus amigos
-        </DialogDescription>
-        <div className="flex items-center justify-center py-2">
-          {invitation.data ? (
-            <QRCodeSVG
-              value={inviteLink}
-              title="Convite para o grupo | SplitMyTrip"
-              size={256}
-            />
-          ) : (
-            <Skeleton className="w-[256px] h-[256px]" />
-          )}
-        </div>
+        <button onClick={generateInvitation}>
+          <FaArrowsRotate />
+        </button>
+      </div>
+      <DialogDescription>
+        Compartilhe os links de convite abaixo para convidar seus amigos
+      </DialogDescription>
+      <div className="flex items-center justify-center py-2">
         {invitation.data ? (
-          <div className="flex items-center justify-between">
-            <span className="text-md underline underline-offset-4 text-gray-300">
-              {inviteLink}
-            </span>
-            <button
-              onClick={() => writeToClipboard(inviteLink)}
-              className="h-6 w-6 flex items-center justify-center rounded-sm"
-            >
-              <FaClipboard className="text-gray-500" />
-            </button>
-          </div>
+          <QRCodeSVG
+            value={inviteLink}
+            title="Convite para o grupo | SplitMyTrip"
+            size={256}
+          />
         ) : (
-          <Skeleton className="w-full h-6" />
+          <Skeleton className="w-[256px] h-[256px]" />
         )}
-      </DialogHeader>
-    </DialogContent>
+      </div>
+      {invitation.data ? (
+        <div className="flex items-center justify-between">
+          <span className="text-md underline underline-offset-4 text-gray-300">
+            {inviteLink}
+          </span>
+          <button
+            onClick={() => writeToClipboard(inviteLink)}
+            className="h-6 w-6 flex items-center justify-center rounded-sm"
+          >
+            <FaClipboard className="text-gray-500" />
+          </button>
+        </div>
+      ) : (
+        <Skeleton className="w-full h-6" />
+      )}
+    </main>
   );
 }

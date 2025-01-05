@@ -19,12 +19,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import InviteDialog from "@/components/inviteDialog";
+import ParticipantsDialog from "@/components/participantsDialog";
 
 export default function Dashboard() {
-  const [shouldFetchInvite, setShouldFetchInvite] = useState(false);
-
+  const [dialogType, setDialogType] = useState("");
   const groups = useSWR<{ data: GroupResponse }, Error>("/api/groups", fetcher);
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
@@ -45,24 +50,42 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col justify-center p-4 gap-3">
       <div className="flex items-center justify-between py-4">
-        <h3 className="text-2xl font-semibold">{groups.data.data.title}</h3>
-
         <Dialog>
           <DropdownMenu>
-            <DropdownMenuTrigger className="bg-gray-200 rounded-sm h-9 w-9 flex items-center justify-center">
-              <FaBarsStaggered className="text-gray-500" size={18} />
-            </DropdownMenuTrigger>
+            <div className="flex justify-between items-center w-full">
+              <h3 className="text-2xl font-semibold">
+                {groups.data.data.title}
+              </h3>
+              <DropdownMenuTrigger className="bg-gray-200 rounded-sm h-9 w-9 flex items-center justify-center">
+                <FaBarsStaggered className="text-gray-500" size={18} />
+              </DropdownMenuTrigger>
+            </div>
             <DropdownMenuContent>
               <DropdownMenuLabel>Opções</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DialogTrigger>
-                <DropdownMenuItem onClick={() => setShouldFetchInvite(true)}>
+                <DropdownMenuItem onClick={() => setDialogType("convidar")}>
                   Convidar
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setDialogType("participantes")}
+                >
+                  Participantes
                 </DropdownMenuItem>
               </DialogTrigger>
             </DropdownMenuContent>
           </DropdownMenu>
-          <InviteDialog shouldFetchInvite={shouldFetchInvite} />
+          <DialogContent className="w-[calc(100%-30px)] rounded-md">
+            <DialogHeader>
+              {dialogType == "convidar" ? (
+                <InviteDialog />
+              ) : dialogType == "participantes" ? (
+                <ParticipantsDialog />
+              ) : (
+                <div></div>
+              )}
+            </DialogHeader>
+          </DialogContent>
         </Dialog>
       </div>
       <ExpensesOverview

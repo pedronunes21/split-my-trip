@@ -23,7 +23,9 @@ export async function GET(request: NextRequest) {
     `
     ).rows as UserResponse[];
 
-    return NextResponse.json(users);
+    return NextResponse.json({
+      data: users,
+    });
   } catch (err) {
     console.log(err);
     return NextResponse.json(
@@ -49,7 +51,10 @@ export async function POST(request: Request) {
     ).rows[0] as InvitationResponse;
 
     if (!invitation) {
-      throw new Error("Invalid invitation code.");
+      return NextResponse.json(
+        { error: "Invalid invitation code." },
+        { status: 404 }
+      );
     }
 
     const user = await client.sql`
