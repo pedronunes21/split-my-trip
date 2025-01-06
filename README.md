@@ -34,13 +34,14 @@ Fix:
 [x] Generate another invite code with a button
 [x] Test create account with invite link page
 [x] Create expense
-[] Pagination
 [] Create screen for error, when fetch went wrong
-[] Redirect user to register if not logged in and try to access private page
-[] Delete expense if was created by you
+[] Redirect user to register if not logged in and try to access private page and vice versa
 [] Add more images to banner and user icon
 [] Finish a trip
 [] Screen to show how much you owe to whom
+[] Change from localhost to domain in invite link
+[] Pagination
+[] Delete expense if was created by you
 
 ## Process
 
