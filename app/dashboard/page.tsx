@@ -7,6 +7,7 @@ import {
   ExpenseHistoryResponse,
   ExpensesOverviewResponse,
   GroupResponse,
+  UserResponse,
 } from "@/types/responses";
 import { Suspense, useState } from "react";
 import useSWR from "swr";
@@ -34,6 +35,7 @@ import PageError from "@/components/pageError";
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
   const groups = useSWR<{ data: GroupResponse }, Error>("/api/groups", fetcher);
+  const user = useSWR<{ data: UserResponse }, Error>("/api/users/me", fetcher);
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
     "api/expenses/history",
@@ -45,7 +47,12 @@ export default function Dashboard() {
     fetcher
   );
 
-  if (groups.error || expensesHistory.error || expensesOverview.error)
+  if (
+    groups.error ||
+    expensesHistory.error ||
+    expensesOverview.error ||
+    user.error
+  )
     return <PageError />;
 
   if (!groups.data) return <ScreenLoading />;
@@ -102,7 +109,7 @@ export default function Dashboard() {
         debt={expensesOverview.data?.data.debt}
         surplus={expensesOverview.data?.data.surplus}
         group_photo={groups.data.data.photo_url}
-        user_photo="/avatar/avatar1.jpg"
+        user_photo={user.data?.data.photo_url}
       />
       <div>
         <div className="flex items-center justify-between py-4">

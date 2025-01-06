@@ -83,7 +83,7 @@ export default function Page() {
     };
 
     try {
-      const res = await fetch("/api/groups", {
+      const resGroup = await fetch("/api/groups", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,12 +91,27 @@ export default function Page() {
         body: JSON.stringify(request),
       });
 
-      const data = await res.json();
+      const dataGroup: { data: { group_id: string }; error?: string } =
+        await resGroup.json();
 
-      if (!res.ok) {
+      if (!resGroup.ok) {
         toast({
           variant: "destructive",
-          title: data.error,
+          title: dataGroup.error,
+        });
+        return;
+      }
+
+      const resInvite = await fetch("/api/invitations", {
+        method: "POST",
+      });
+
+      const dataInvite = await resInvite.json();
+
+      if (!resInvite.ok) {
+        toast({
+          variant: "destructive",
+          title: dataInvite.error,
         });
         return;
       }
@@ -104,12 +119,12 @@ export default function Page() {
       toast({
         title: "Grupo criado com sucesso!",
         description: "Você será redirecionado em breve.",
-        duration: 2000,
+        duration: 3000,
       });
 
       setTimeout(() => {
         navigate("/dashboard");
-      }, 2000);
+      }, 3000);
     } catch (err) {
       console.log(err);
       toast({

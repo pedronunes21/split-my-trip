@@ -3,7 +3,7 @@ import { Skeleton } from "./ui/skeleton";
 
 type ExpensesOverviewProps = {
   group_photo: string;
-  user_photo: string;
+  user_photo: string | undefined;
   balance: string | undefined;
   debt: string | undefined;
   surplus: string | undefined;
@@ -17,13 +17,17 @@ export default function ExpensesOverview(props: ExpensesOverviewProps) {
     >
       <div className="flex items-start space-x-4 bg-black bg-opacity-30 rounded-sm p-2 w-full">
         <div className="flex-shrink-0">
-          <Image
-            className="h-16 w-16 rounded-full"
-            src={props.user_photo}
-            alt="Profile Picture"
-            width={64}
-            height={64}
-          />
+          {props.user_photo ? (
+            <Image
+              className="h-16 w-16 rounded-full"
+              src={props.user_photo}
+              alt="Profile Picture"
+              width={64}
+              height={64}
+            />
+          ) : (
+            <Skeleton className="h-16 w-16 rounded-full" />
+          )}
         </div>
         <div>
           <div className="flex flex-col">

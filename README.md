@@ -38,16 +38,16 @@ Fix:
 [] Create screen for component error
 [x] Redirect user to register if not logged in and try to access private page and vice versa
 [x] Option to logout
-[] Create home page
 [x] Add more images to banner and user icon
+[] Create home page
 [] Finish a trip
 [] Screen to show how much you owe to whom
 [] Pagination
 [] Delete expense if was created by you
-[] Change from localhost to domain in invite link
-[] If user if the group admin, create page to delete group and all users from the group
+[] If user is the group admin, create page to delete group and all users from the group
 [] Check why build version is not working
-[] Banner image in dashboard not working
+[x] Banner image in dashboard not working
+[] Change from localhost to domain in invite link
 
 ## Process
 
