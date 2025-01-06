@@ -49,6 +49,7 @@ Fix:
 [] Change from localhost to domain in invite link
 [] Check why build version is not working
 [] Check server side fetching
+[] Error after redirecting from /group/create to /dashboard
 
 ## Process
 
