@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog";
 import InviteDialog from "@/components/inviteDialog";
 import ParticipantsDialog from "@/components/participantsDialog";
+import Link from "next/link";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
@@ -98,10 +99,14 @@ export default function Dashboard() {
       <div>
         <div className="flex items-center justify-between py-4">
           <h3 className="text-lg font-semibold pb-2">Gastos recentes</h3>
-          <button className="bg-gray-200 rounded-sm h-9 w-9 flex items-center justify-center">
+          <Link
+            href="/expense/create"
+            className="bg-gray-200 rounded-sm h-9 w-9 flex items-center justify-center"
+          >
             <FaPlus className="text-gray-500" size={18} />
-          </button>
+          </Link>
         </div>
+
         <ul className="flex flex-col gap-3">
           <Suspense fallback={<ExpenseCardSkeleton />}>
             {expensesHistory.data?.data.map((expense) => (
