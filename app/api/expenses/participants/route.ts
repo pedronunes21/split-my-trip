@@ -24,9 +24,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (err) {
     console.log(err);
-    return NextResponse.json(
-      { error: "Something went wrong! Try again later." },
-      { status: 500 }
-    );
+    throw new Error("Something went wrong! Try again later.");
   }
 }

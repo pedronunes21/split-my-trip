@@ -18,7 +18,9 @@ export default function InviteDialog() {
   );
 
   if (invitation.error) return <div>Failed to load</div>;
-  const inviteLink = `http://localhost:3000/invite/${invitation.data?.data.invite_code}`;
+
+  console.log(invitation.data);
+  if (invitation.data?.data.invite_code == "") generateInvitation();
 
   function writeToClipboard(text: string) {
     navigator.clipboard.writeText(text);
@@ -69,9 +71,9 @@ export default function InviteDialog() {
         Compartilhe os links de convite abaixo para convidar seus amigos
       </DialogDescription>
       <div className="flex items-center justify-center py-2">
-        {invitation.data ? (
+        {invitation.data && invitation.data.data.invite_code != "" ? (
           <QRCodeSVG
-            value={inviteLink}
+            value={`http://localhost:3000/invite/${invitation.data?.data.invite_code}`}
             title="Convite para o grupo | SplitMyTrip"
             size={256}
           />
@@ -79,13 +81,17 @@ export default function InviteDialog() {
           <Skeleton className="w-[256px] h-[256px]" />
         )}
       </div>
-      {invitation.data ? (
+      {invitation.data && invitation.data.data.invite_code != "" ? (
         <div className="flex items-center justify-between">
           <span className="text-md underline underline-offset-4 text-gray-300">
-            {inviteLink}
+            {`http://localhost:3000/invite/${invitation.data?.data.invite_code}`}
           </span>
           <button
-            onClick={() => writeToClipboard(inviteLink)}
+            onClick={() =>
+              writeToClipboard(
+                `http://localhost:3000/invite/${invitation.data?.data.invite_code}`
+              )
+            }
             className="h-6 w-6 flex items-center justify-center rounded-sm"
           >
             <FaClipboard className="text-gray-500" />

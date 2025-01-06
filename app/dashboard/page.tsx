@@ -29,6 +29,7 @@ import InviteDialog from "@/components/inviteDialog";
 import ParticipantsDialog from "@/components/participantsDialog";
 import Link from "next/link";
 import LogoutDialog from "@/components/logoutDialog";
+import PageError from "@/components/pageError";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
@@ -45,7 +46,7 @@ export default function Dashboard() {
   );
 
   if (groups.error || expensesHistory.error || expensesOverview.error)
-    return <div>Failed to load</div>;
+    return <PageError />;
 
   if (!groups.data) return <ScreenLoading />;
 

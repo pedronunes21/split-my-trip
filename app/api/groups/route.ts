@@ -9,10 +9,7 @@ export async function GET(request: NextRequest) {
     const group_id = request.cookies.get("group_id")?.value;
 
     if (!group_id) {
-      return NextResponse.json(
-        { error: "Group ID not found or invalid." },
-        { status: 404 }
-      );
+      throw new Error("Group ID not found or invalid.");
     }
 
     const res = await client.sql`
@@ -27,10 +24,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (err) {
     console.log(err);
-    return NextResponse.json(
-      { error: "Something went wrong! Try again later." },
-      { status: 500 }
-    );
+    throw new Error("Something went wrong! Try again later.");
   } finally {
     client.release();
   }

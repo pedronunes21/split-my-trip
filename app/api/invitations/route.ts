@@ -7,33 +7,36 @@ export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
 
   if (!group_id) {
-    return NextResponse.json(
-      { error: "Group ID not found or invalid." },
-      { status: 404 }
-    );
+    throw new Error("Group ID not found or invalid.");
   }
 
   try {
-    const res = await client.sql`
+    const res = (
+      await client.sql`
       SELECT invite_code
       FROM invitations
       WHERE group_id=${group_id}
-    `;
+    `
+    ).rows as InvitationResponse[];
 
-    const { invite_code } = res.rows[0] as InvitationResponse;
+    if (res.length > 0) {
+      return NextResponse.json({
+        data: {
+          invite_code: res[0].invite_code,
+          group_id,
+        },
+      });
+    }
 
     return NextResponse.json({
       data: {
-        invite_code,
+        invite_code: "",
         group_id,
       },
     });
   } catch (err) {
     console.log(err);
-    return NextResponse.json(
-      { error: "Something went wrong! Try again later." },
-      { status: 500 }
-    );
+    throw new Error("Something went wrong! Try again later.");
   } finally {
     client.release();
   }
