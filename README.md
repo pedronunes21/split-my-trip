@@ -39,13 +39,15 @@ Fix:
 [x] Redirect user to register if not logged in and try to access private page and vice versa
 [x] Option to logout
 [] Create home page
-[] Add more images to banner and user icon
+[x] Add more images to banner and user icon
 [] Finish a trip
 [] Screen to show how much you owe to whom
 [] Pagination
 [] Delete expense if was created by you
 [] Change from localhost to domain in invite link
 [] If user if the group admin, create page to delete group and all users from the group
+[] Check why build version is not working
+[] Banner image in dashboard not working
 
 ## Process
 

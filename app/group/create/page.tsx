@@ -24,12 +24,16 @@ import { avatarImages } from "@/lib/definitions";
 
 const groupBanners = [
   {
-    path: "/group_banner/beach-bg.jpg",
-    text: "Imagem 1",
+    path: "/banner/beach1.webp",
+    text: "Praia 1",
   },
   {
-    path: "/group_banner/beach-bg.jpg",
-    text: "Imagem 2",
+    path: "/banner/beach2.webp",
+    text: "Praia 2",
+  },
+  {
+    path: "/banner/beach3.webp",
+    text: "Praia 3",
   },
 ];
 
@@ -193,7 +197,7 @@ export default function Page() {
         </div>
 
         <div className="grid w-full max-w-sm items-center gap-1.5">
-          <Label htmlFor="email">Escolha um ícone</Label>
+          <Label htmlFor="email">Escolha um ícone para você</Label>
           <div className="flex items-center gap-3">
             <Dialog>
               <DialogTrigger asChild>

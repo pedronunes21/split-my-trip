@@ -12,8 +12,8 @@ type ExpensesOverviewProps = {
 export default function ExpensesOverview(props: ExpensesOverviewProps) {
   return (
     <div
-      style={{ backgroundImage: `url(${props.group_photo})` }}
-      className="max-w-screen-lg w-full bg-white rounded-lg shadow-md p-3 flex items-start space-x-4 bg-cover bg-center"
+      style={{ backgroundImage: `url('${props.group_photo}')` }}
+      className="max-w-screen-lg w-full rounded-lg shadow-md p-3 flex items-start space-x-4 bg-cover bg-center"
     >
       <div className="flex items-start space-x-4 bg-black bg-opacity-30 rounded-sm p-2 w-full">
         <div className="flex-shrink-0">
