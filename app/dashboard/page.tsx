@@ -28,6 +28,7 @@ import {
 import InviteDialog from "@/components/inviteDialog";
 import ParticipantsDialog from "@/components/participantsDialog";
 import Link from "next/link";
+import LogoutDialog from "@/components/logoutDialog";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
@@ -73,6 +74,10 @@ export default function Dashboard() {
                 >
                   Participantes
                 </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => setDialogType("sair")}>
+                  Sair
+                </DropdownMenuItem>
               </DialogTrigger>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -82,6 +87,8 @@ export default function Dashboard() {
                 <InviteDialog />
               ) : dialogType == "participantes" ? (
                 <ParticipantsDialog />
+              ) : dialogType == "sair" ? (
+                <LogoutDialog />
               ) : (
                 <div></div>
               )}

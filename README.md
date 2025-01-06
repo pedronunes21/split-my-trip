@@ -36,6 +36,7 @@ Fix:
 [x] Create expense
 [] Create screen for error, when fetch went wrong
 [] Redirect user to register if not logged in and try to access private page and vice versa
+[] Option to logout
 [] Add more images to banner and user icon
 [] Finish a trip
 [] Screen to show how much you owe to whom

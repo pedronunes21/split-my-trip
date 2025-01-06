@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
       await client.sql`
       SELECT *
       FROM users
-      WHERE group_id = ${group_id}
+      WHERE group_id = ${group_id} AND status = 'A'
     `
     ).rows as UserResponse[];
 
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const client = await db.connect();
   const { name, photo_url, invite_code }: UserRequest = await request.json();
 
@@ -79,6 +79,42 @@ export async function POST(request: Request) {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
     });
+
+    return response;
+  } catch (err) {
+    console.log(err);
+    return NextResponse.json(
+      { error: "Something went wrong! Try again later." },
+      { status: 500 }
+    );
+  } finally {
+    client.release();
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const client = await db.connect();
+  const user_id = request.cookies.get("user_id")?.value;
+
+  if (!user_id) {
+    return NextResponse.json(
+      { error: "Group ID not found or invalid." },
+      { status: 404 }
+    );
+  }
+
+  try {
+    await client.sql`
+      UPDATE users
+      SET status = 'I'
+      WHERE id = ${user_id}
+    `;
+    const response = NextResponse.json({
+      message: "User deleted successfully.",
+    });
+
+    response.cookies.delete("group_id");
+    response.cookies.delete("user_id");
 
     return response;
   } catch (err) {

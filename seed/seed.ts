@@ -18,6 +18,7 @@ async function seedUsers() {
       id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
       name VARCHAR(255) NOT NULL,
       photo_url TEXT NOT NULL,
+      status VARCHAR(1) DEFAULT 'A',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
