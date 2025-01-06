@@ -11,7 +11,7 @@ import {
 import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
 import { ExpenseParticipants } from "@/types/responses";
-import { Suspense } from "react";
+import { useState } from "react";
 
 type ExpenseCardProps = {
   expense_id: string;
@@ -23,6 +23,7 @@ type ExpenseCardProps = {
 };
 
 export function ExpenseCard(props: ExpenseCardProps) {
+  const [shouldFetch, setShouldFetch] = useState(false);
   const date = new Date(props.date);
   let compactDate = "";
   const completeDate = date.toLocaleDateString("pt-BR", {
@@ -47,14 +48,21 @@ export function ExpenseCard(props: ExpenseCardProps) {
   }
 
   const participants = useSWR<{ data: ExpenseParticipants[] }, Error>(
-    `/api/expenses/participants?expense_id=${props.expense_id}`,
+    shouldFetch
+      ? `/api/expenses/participants?expense_id=${props.expense_id}`
+      : null,
     fetcher
   );
 
   if (participants.error) return <div>Failed to load</div>;
+
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger
+        onClick={() => {
+          setShouldFetch(true);
+        }}
+      >
         <li className="flex items-start gap-4">
           <div className="flex-shrink-0">
             <Image
@@ -106,9 +114,9 @@ export function ExpenseCard(props: ExpenseCardProps) {
           </DialogDescription>
           <div className="flex items-start flex-col gap-3">
             <h5>Participantes</h5>
-            <Suspense fallback={<Skeleton className="h-4 w-full" />}>
-              <ul className="flex flex-col items-start gap-2 pl-4">
-                {participants.data?.data.map((p) => (
+            <ul className="flex flex-col items-start gap-2 pl-4">
+              {participants.data ? (
+                participants.data.data.map((p) => (
                   <li key={p.user_id} className="flex items-center gap-2">
                     <Image
                       className="h-6 w-6 rounded-full"
@@ -119,9 +127,11 @@ export function ExpenseCard(props: ExpenseCardProps) {
                     />
                     <span>{p.user_name}</span>
                   </li>
-                ))}
-              </ul>
-            </Suspense>
+                ))
+              ) : (
+                <Skeleton className="h-4 w-full" />
+              )}
+            </ul>
           </div>
           <div className="flex justify-end items-end">
             Total:&nbsp;R$&nbsp;

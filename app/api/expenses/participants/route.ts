@@ -1,8 +1,9 @@
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
+const client = await db.connect();
+
 export async function GET(request: NextRequest) {
-  const client = await db.connect();
   const expense_id = request.nextUrl.searchParams.get("expense_id");
 
   try {

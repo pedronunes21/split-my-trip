@@ -82,7 +82,6 @@ export default function Page() {
   const onSubmit: SubmitHandler<ExpenseRequest> = async (data) => {
     setLoading(true);
     const { amount, date, description, participants, payer_id } = data;
-    console.log(data);
 
     const request: ExpenseRequest = {
       amount: amount.replaceAll(".", "").replace(",", "."),
@@ -119,8 +118,6 @@ export default function Page() {
       setTimeout(() => {
         navigate("/dashboard");
       }, 1000);
-
-      console.log(data);
     } catch (err) {
       console.log(err);
       toast({

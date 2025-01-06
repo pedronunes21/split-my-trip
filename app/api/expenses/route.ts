@@ -2,8 +2,9 @@ import { ExpenseRequest } from "@/types/requests";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
+const client = await db.connect();
+
 export async function POST(request: NextRequest) {
-  const client = await db.connect();
   const { participants, payer_id, amount, description, date }: ExpenseRequest =
     await request.json();
 
@@ -43,7 +44,5 @@ export async function POST(request: NextRequest) {
       { error: "Something went wrong! Try again later." },
       { status: 500 }
     );
-  } finally {
-    client.release();
   }
 }

@@ -2,8 +2,9 @@ import { ExpensesDetailsResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
+const client = await db.connect();
+
 export async function GET(request: NextRequest) {
-  const client = await db.connect();
   const group_id = request.cookies.get("group_id")?.value;
 
   if (!group_id) {
@@ -54,7 +55,5 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.error(err);
     throw new Error("Something went wrong! Try again later.");
-  } finally {
-    client.release();
   }
 }

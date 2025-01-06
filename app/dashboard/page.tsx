@@ -34,17 +34,32 @@ import PageError from "@/components/pageError";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
-  const groups = useSWR<{ data: GroupResponse }, Error>("/api/groups", fetcher);
-  const user = useSWR<{ data: UserResponse }, Error>("/api/users/me", fetcher);
+
+  const groups = useSWR<{ data: GroupResponse }, Error>(
+    "/api/groups",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
+  const user = useSWR<{ data: UserResponse }, Error>("/api/users/me", fetcher, {
+    revalidateOnFocus: false,
+  });
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
     "api/expenses/history",
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   const expensesOverview = useSWR<{ data: ExpensesOverviewResponse }, Error>(
     "api/expenses/overview?me=true",
-    fetcher
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   );
 
   if (

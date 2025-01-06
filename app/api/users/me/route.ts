@@ -2,8 +2,9 @@ import { UserResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
+const client = await db.connect();
+
 export async function GET(request: NextRequest) {
-  const client = await db.connect();
   const user_id = request.cookies.get("user_id")?.value;
 
   if (!user_id) {
@@ -25,7 +26,5 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     console.log(err);
     throw new Error("Something went wrong! Try again later.");
-  } finally {
-    client.release();
   }
 }

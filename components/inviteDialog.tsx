@@ -45,8 +45,6 @@ export default function InviteDialog() {
       }
 
       setShouldFetch(true);
-
-      console.log(data);
     } catch (err) {
       console.log(err);
       toast({

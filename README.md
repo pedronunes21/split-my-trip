@@ -45,9 +45,10 @@ Fix:
 [] Pagination
 [] Delete expense if was created by you
 [] If user is the group admin, create page to delete group and all users from the group
-[] Check why build version is not working
 [x] Banner image in dashboard not working
 [] Change from localhost to domain in invite link
+[] Check why build version is not working
+[] Check server side fetching
 
 ## Process
 
