@@ -126,6 +126,15 @@ export function ExpenseCard(props: ExpenseCardProps) {
                       height={32}
                     />
                     <span>{p.user_name}</span>
+                    <small>
+                      R${" "}
+                      {(
+                        parseFloat(props.amount) /
+                        participants.data!.data.length
+                      )
+                        .toFixed(2)
+                        .replace(".", ",")}
+                    </small>
                   </li>
                 ))
               ) : (
