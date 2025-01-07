@@ -138,7 +138,7 @@ export function ExpenseCard(props: ExpenseCardProps) {
                   </li>
                 ))
               ) : (
-                <Skeleton className="h-4 w-full" />
+                <ParticipantSkeleton />
               )}
             </ul>
           </div>
@@ -164,6 +164,15 @@ export function ExpenseCardSkeleton() {
         <Skeleton className="h-4 w-[75px]" />
         <Skeleton className="h-4 w-[250px]" />
       </div>
+    </div>
+  );
+}
+
+function ParticipantSkeleton() {
+  return (
+    <div className="flex items-center gap-3">
+      <Skeleton className="h-6 w-6 rounded-full" />
+      <Skeleton className="h-4 w-24" />
     </div>
   );
 }

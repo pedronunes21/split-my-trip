@@ -25,7 +25,6 @@ export default function RootLayout({
         <CookiesProvider>
           <main>{children}</main>
         </CookiesProvider>
-        ;
         <Toaster />
       </body>
     </html>

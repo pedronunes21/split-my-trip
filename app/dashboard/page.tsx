@@ -32,6 +32,7 @@ import Link from "next/link";
 import LogoutDialog from "@/components/logoutDialog";
 import PageError from "@/components/pageError";
 import AccountError from "@/components/accountError";
+import ExpenseDetailsDialog from "@/components/expenseDetailsDialog";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
@@ -73,7 +74,12 @@ export default function Dashboard() {
 
   if (!groups.data) return <ScreenLoading />;
 
-  if (!groups.data.data || !user.data?.data) return <AccountError />;
+  if (
+    !groups.isLoading &&
+    !user.isLoading &&
+    (!groups.data.data || !user.data?.data)
+  )
+    return <AccountError />;
 
   return (
     <div className="flex flex-col justify-center p-4 gap-3">
@@ -100,6 +106,11 @@ export default function Dashboard() {
                 >
                   Participantes
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setDialogType("expense_details")}
+                >
+                  Resumo
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => setDialogType("sair")}>
                   Sair
@@ -115,6 +126,8 @@ export default function Dashboard() {
                 <ParticipantsDialog />
               ) : dialogType == "sair" ? (
                 <LogoutDialog />
+              ) : dialogType == "expense_details" ? (
+                <ExpenseDetailsDialog />
               ) : (
                 <div></div>
               )}

@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
   try {
     const expensesDetails = (
       await client.sql`
-        SELECT 
+        SELECT
           json_build_object(
             'id', p2.id,
             'name', p2.name
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
         JOIN expenses e ON ep.expense_id = e.id
         JOIN users p1 ON e.payer_id = p1.id -- The person who paid
         JOIN users p2 ON ep.user_id = p2.id  AND p1.id <> p2.id -- The person who owes
-        WHERE ep.amount_owed > 0 AND e.group_id = ${group_id} AND (p1.id <> ${user_id} AND p2.id <> ${user_id})
+        WHERE ep.amount_owed > 0 AND e.group_id = ${group_id} AND (p1.id = ${user_id} OR p2.id = ${user_id})
         GROUP BY p1.id, p2.id
         HAVING COALESCE(SUM(
             CASE

@@ -24,32 +24,19 @@ Functionalities
 [] Create a stack in sessionStorage for navigation (go back arrows)
 
 Fix:
-[x] Throw errors with NextResponse.json with status
 [] Pass cookies in server side fetch
-[x] Open dialog when user clicks on an expense, with more information
-[x] If expense was in the same day, show only time, else, show date
-[x] Filter summary to user
-[x] Screen to generate qrcode and link
-[x] Screen to follow qrcode and link
-[x] Generate another invite code with a button
-[x] Test create account with invite link page
-[x] Create expense
-[x] Create screen for error, when fetch went wrong
-[] Create screen for component error
-[x] Redirect user to register if not logged in and try to access private page and vice versa
-[x] Option to logout
-[x] Add more images to banner and user icon
 [] Create home page
 [] Finish a trip
-[] Screen to show how much you owe to whom
-[] Pagination
-[] Delete expense if was created by you
 [] If user is the group admin, create page to delete group and all users from the group
-[x] Banner image in dashboard not working
-[] Change from localhost to domain in invite link
-[] Check why build version is not working
 [] Check server side fetching
-[] Error after redirecting from /group/create to /dashboard
+
+## Essential Features
+
+[] Screen to show how much you owe to whom
+[] Delete expense if was created by you (add created by in expense table)
+[] Pagination
+[] Page to show all transactions with filters (date, user)
+[] Change from localhost to domain in invite link
 
 ## Process
 

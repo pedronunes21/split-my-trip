@@ -88,8 +88,6 @@ export default function Page() {
       setTimeout(() => {
         navigate("/dashboard");
       }, 2000);
-
-      console.log(data);
     } catch (err) {
       console.log(err);
       toast({

@@ -27,9 +27,14 @@ export type ExpensesOverviewResponse = {
 };
 
 export type ExpensesDetailsResponse = {
-  ower_id: string;
-  ower: string;
-  payer: string;
+  ower: {
+    id: string;
+    name: string;
+  };
+  payer: {
+    id: string;
+    name: string;
+  };
   amount_owed: string;
 };
 
