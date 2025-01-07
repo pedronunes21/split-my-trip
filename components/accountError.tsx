@@ -9,9 +9,11 @@ import {
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
 import { navigate } from "@/app/actions";
+import { useCookies } from "next-client-cookies";
 
 export default function AccountError() {
   const [isLoading, setLoading] = useState(false);
+  const cookies = useCookies();
 
   function refreshPage() {
     location.reload();
@@ -19,7 +21,8 @@ export default function AccountError() {
 
   async function removeCookies() {
     setLoading(true);
-    document.cookie = "";
+    cookies.remove("group_id");
+    cookies.remove("user_id");
     navigate("/");
     setLoading(false);
   }
