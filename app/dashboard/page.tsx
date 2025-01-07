@@ -31,6 +31,7 @@ import ParticipantsDialog from "@/components/participantsDialog";
 import Link from "next/link";
 import LogoutDialog from "@/components/logoutDialog";
 import PageError from "@/components/pageError";
+import AccountError from "@/components/accountError";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
@@ -71,6 +72,8 @@ export default function Dashboard() {
     return <PageError />;
 
   if (!groups.data) return <ScreenLoading />;
+
+  if (!groups.data.data || !user.data?.data) return <AccountError />;
 
   return (
     <div className="flex flex-col justify-center p-4 gap-3">

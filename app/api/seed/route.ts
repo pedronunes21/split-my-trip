@@ -22,6 +22,7 @@ export async function POST() {
         name VARCHAR(255) NOT NULL,
         photo_url TEXT NOT NULL,
         group_id UUID,
+        status VARCHAR(1) DEFAULT 'A',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `;

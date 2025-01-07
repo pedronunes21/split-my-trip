@@ -3,14 +3,12 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { useState } from "react";
 import { Spinner } from "./ui/spinner";
-import { useRouter } from "next/navigation";
 
 export default function PageError() {
   const [isLoading, setLoading] = useState(false);
-  const router = useRouter();
   function reloadPage() {
     setLoading(true);
-    router.refresh();
+    location.reload();
     setTimeout(() => {
       setLoading(false);
     }, 15000);
