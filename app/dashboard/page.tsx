@@ -9,7 +9,7 @@ import {
   GroupResponse,
   UserResponse,
 } from "@/types/responses";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { FaPlus, FaBarsStaggered } from "react-icons/fa6";
 import {
@@ -33,6 +33,7 @@ import LogoutDialog from "@/components/logoutDialog";
 import PageError from "@/components/pageError";
 import AccountError from "@/components/accountError";
 import ExpenseDetailsDialog from "@/components/expenseDetailsDialog";
+import ExpenseHistoryDialog from "@/components/ExpensesHistoryDialog";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
@@ -49,7 +50,7 @@ export default function Dashboard() {
   });
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
-    "api/expenses/history",
+    "api/expenses/history?size=10&number=1",
     fetcher,
     {
       revalidateOnFocus: false,
@@ -107,6 +108,11 @@ export default function Dashboard() {
                   Participantes
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  onClick={() => setDialogType("expense_history")}
+                >
+                  Gastos
+                </DropdownMenuItem>
+                <DropdownMenuItem
                   onClick={() => setDialogType("expense_details")}
                 >
                   Resumo
@@ -128,6 +134,8 @@ export default function Dashboard() {
                 <LogoutDialog />
               ) : dialogType == "expense_details" ? (
                 <ExpenseDetailsDialog />
+              ) : dialogType == "expense_history" ? (
+                <ExpenseHistoryDialog />
               ) : (
                 <div></div>
               )}
@@ -144,7 +152,10 @@ export default function Dashboard() {
       />
       <div>
         <div className="flex items-center justify-between py-4">
-          <h3 className="text-lg font-semibold pb-2">Gastos recentes</h3>
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold">Gastos recentes</h3>
+            <small>Ver todos</small>
+          </div>
           <Link
             href="/expense/create"
             className="bg-gray-200 rounded-sm h-9 w-9 flex items-center justify-center"
@@ -152,10 +163,9 @@ export default function Dashboard() {
             <FaPlus className="text-gray-500" size={18} />
           </Link>
         </div>
-
         <ul className="flex flex-col gap-3">
-          <Suspense fallback={<ExpenseCardSkeleton />}>
-            {expensesHistory.data?.data.map((expense) => (
+          {expensesHistory.data ? (
+            expensesHistory.data?.data.map((expense) => (
               <ExpenseCard
                 key={expense.id}
                 expense_id={expense.id}
@@ -165,8 +175,10 @@ export default function Dashboard() {
                 description={expense.description}
                 amount={expense.amount}
               />
-            ))}
-          </Suspense>
+            ))
+          ) : (
+            <ExpenseCardSkeleton />
+          )}
         </ul>
       </div>
     </div>

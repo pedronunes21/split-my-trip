@@ -6,10 +6,21 @@ const client = await db.connect();
 
 export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
+  const pageSizeParam = request.nextUrl.searchParams.get("size");
+  const pageNumberParam = request.nextUrl.searchParams.get("number");
 
   if (!group_id) {
     throw new Error("Group ID not found or invalid.");
   }
+
+  if (!pageSizeParam || !pageNumberParam) {
+    throw new Error("The 'size' and 'number' parameters are required!");
+  }
+
+  const pageSize = parseInt(pageSizeParam);
+  const pageNumber = parseInt(pageNumberParam);
+
+  const offset = (pageNumber - 1) * pageSize;
 
   try {
     const expenses = (
@@ -28,7 +39,9 @@ export async function GET(request: NextRequest) {
       FROM expenses e
       JOIN users u ON e.payer_id = u.id
       WHERE e.group_id = ${group_id}
-      ORDER BY e.date DESC;
+      ORDER BY e.date DESC
+      LIMIT ${pageSize}
+      OFFSET ${offset}
     `
     ).rows as ExpenseHistoryResponse[];
 
