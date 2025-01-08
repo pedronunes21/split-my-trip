@@ -2,7 +2,7 @@
 import { ExpenseCard, ExpenseCardSkeleton } from "@/components/expenseCard";
 import PageError from "@/components/pageError";
 import fetcher from "@/lib/fetcher";
-import { ExpenseHistoryResponse } from "@/types/responses";
+import { ExpenseHistoryResponse, UserResponse } from "@/types/responses";
 import useSWR from "swr";
 import {
   Pagination,
@@ -16,29 +16,54 @@ import { useEffect, useState } from "react";
 import { useCookies } from "next-client-cookies";
 import Link from "next/link";
 import { FaAngleLeft } from "react-icons/fa6";
+import { DatePickerWithRange } from "@/components/ui/datePickerWithRange";
+import { DateRange } from "react-day-picker";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Page() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState([1]);
+  const [date, setDate] = useState<DateRange | undefined>();
+  const [payer, setPayer] = useState("");
+  const pageSize = 2;
 
   const cookies = useCookies();
 
-  const pageSize = 2;
+  const participants = useSWR<{ data: UserResponse[] }, Error>(
+    "/api/users",
+    fetcher
+  );
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
-    `api/expenses/history?size=${pageSize}&number=${page}`,
+    `api/expenses/history?size=${pageSize}&number=${page}${
+      date
+        ? !date.to && date.from
+          ? "&from=" +
+            new Date(date.from.setHours(0, 0, 0, 0)).toISOString() +
+            "&to=" +
+            new Date(date.from.setHours(23, 59, 59, 999)).toISOString()
+          : date.to && date.from
+          ? "&from=" +
+            new Date(date.from.setHours(0, 0, 0, 0)).toISOString() +
+            "&to=" +
+            new Date(date.to?.setHours(23, 59, 59, 999)).toISOString()
+          : ""
+        : ""
+    }${payer ? "&payer=" + payer : ""}`,
     fetcher
   );
 
-  const expensesCount = useSWR<{ data: { count: string } }, Error>(
-    "api/expenses/count",
-    fetcher
-  );
-
-  const count = expensesCount.data?.data.count;
+  const count = expensesHistory.data?.data.length;
   useEffect(() => {
     if (count) {
-      const totalSize = Math.floor(parseInt(count) / pageSize) + 1;
+      const totalSize = Math.floor(count / pageSize) + 1;
       let array = [1];
 
       if (totalSize <= 1) {
@@ -52,7 +77,7 @@ export default function Page() {
     }
   }, [page, count]);
 
-  if (expensesHistory.error || expensesCount.error) return <PageError />;
+  if (expensesHistory.error || participants.error) return <PageError />;
 
   return (
     <main className="p-3">
@@ -71,22 +96,49 @@ export default function Page() {
           Todos os gastos realizados estão listados abaixo
         </span>
       </div>
-
+      <div>
+        <span>Filtrar por:</span>
+        <div className="flex items-center gap-3">
+          <Select onValueChange={(value) => setPayer(value)} value={payer}>
+            <SelectTrigger>
+              <SelectValue placeholder="Quem pagou a conta" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                {participants.data?.data.map((p) => (
+                  <SelectItem key={p.id} value={p.id}>
+                    {p.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <DatePickerWithRange setDate={setDate} />
+        </div>
+      </div>
       <ul className="flex flex-col gap-3">
         {expensesHistory.data ? (
-          expensesHistory.data?.data.map((expense) => (
-            <ExpenseCard
-              key={expense.id}
-              expense_id={expense.id}
-              user_name={expense.user.name}
-              user_profile={expense.user.photo_url}
-              date={expense.date}
-              description={expense.description}
-              amount={expense.amount}
-              created_by={expense.created_by}
-              active_user={cookies.get("user_id")}
-            />
-          ))
+          expensesHistory.data.data.length > 0 ? (
+            expensesHistory.data.data.map((expense) => (
+              <ExpenseCard
+                key={expense.id}
+                expense_id={expense.id}
+                user_name={expense.user.name}
+                user_profile={expense.user.photo_url}
+                date={expense.date}
+                description={expense.description}
+                amount={expense.amount}
+                created_by={expense.created_by}
+                active_user={cookies.get("user_id")}
+              />
+            ))
+          ) : (
+            <div className="flex items-center justify-center w-full py-5">
+              <span className="text-slate-400">Nenhum dado encontrado</span>
+            </div>
+          )
         ) : (
           <ExpenseCardSkeleton />
         )}
@@ -108,7 +160,7 @@ export default function Page() {
           <PaginationItem>
             <PaginationNext
               onClick={() =>
-                setPage(count ? Math.floor(parseInt(count) / pageSize) + 1 : 1)
+                setPage(count ? Math.floor(count / pageSize) + 1 : 1)
               }
             />
           </PaginationItem>

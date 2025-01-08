@@ -33,13 +33,13 @@ Fix:
 ## Essential Features
 
 [x] Screen to show how much you owe to whom
-[] Delete expense if was created by you (add created by in expense table)
+[x] Delete expense if was created by you (add created by in expense table)
 [x] Pagination
 [x] Check for invalid cookies loop
-[] Page to show all transactions with filters (date, user) (add more entries to test)
-[] Change from localhost to domain in invite link
-[] Home page
+[x] Change from localhost to domain in invite link
 [x] Redirect from "/" if is logged in
+[] Home page
+[] Page to show all transactions with filters (date, user) (add more entries to test)
 
 ## Process
 

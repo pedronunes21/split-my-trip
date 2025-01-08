@@ -6,6 +6,9 @@ export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
   const pageSizeParam = request.nextUrl.searchParams.get("size");
   const pageNumberParam = request.nextUrl.searchParams.get("number");
+  const from = request.nextUrl.searchParams.get("from");
+  const to = request.nextUrl.searchParams.get("to");
+  const payer = request.nextUrl.searchParams.get("payer");
 
   if (!group_id) {
     throw new Error("Group ID not found or invalid.");
@@ -22,8 +25,8 @@ export async function GET(request: NextRequest) {
 
   try {
     const client = await db.connect();
-    const expenses = (
-      await client.sql`
+    const queryParams: (string | number)[] = [group_id];
+    let query = `
       SELECT 
         e.id,
         e.amount,
@@ -38,12 +41,36 @@ export async function GET(request: NextRequest) {
         ) AS "user"
       FROM expenses e
       JOIN users u ON e.payer_id = u.id
-      WHERE e.group_id = ${group_id}
-      ORDER BY e.date DESC
-      LIMIT ${pageSize}
-      OFFSET ${offset}
-    `
-    ).rows as ExpenseHistoryResponse[];
+      WHERE e.group_id = $${queryParams.length}
+    `;
+
+    if (from && to) {
+      queryParams.push(from);
+      query += ` AND e.date > $${queryParams.length}`;
+      queryParams.push(to);
+      query += ` AND e.date < $${queryParams.length}`;
+    }
+
+    if (payer) {
+      queryParams.push(payer);
+      query += ` AND e.payer_id = $${queryParams.length}`;
+    }
+
+    queryParams.push(pageSize);
+    query += `
+        ORDER BY e.date DESC
+        LIMIT $${queryParams.length}
+        
+    `;
+
+    queryParams.push(offset);
+    query += `
+      OFFSET $${queryParams.length}
+    `;
+
+    const result = await client.query(query, queryParams);
+
+    const expenses = result.rows as ExpenseHistoryResponse[];
 
     return NextResponse.json({
       data: expenses,

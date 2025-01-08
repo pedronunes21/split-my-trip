@@ -25,7 +25,7 @@ export default function InviteDialog() {
     });
   }
 
-  const inviteLink = `https://split-my-trip.vercel.app/invite/${invitation.data?.data.invite_code}`;
+  const inviteLink = `https://www.splitmytrip.com/invite/${invitation.data?.data.invite_code}`;
 
   async function generateInvitation() {
     setShouldFetch(false);
