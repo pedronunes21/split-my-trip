@@ -32,7 +32,7 @@ export default function Page() {
   const [pagination, setPagination] = useState([1]);
   const [date, setDate] = useState<DateRange | undefined>();
   const [payer, setPayer] = useState("");
-  const pageSize = 2;
+  const pageSize = 10;
 
   const cookies = useCookies();
 

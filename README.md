@@ -39,7 +39,7 @@ Fix:
 [x] Change from localhost to domain in invite link
 [x] Redirect from "/" if is logged in
 [] Home page
-[] Page to show all transactions with filters (date, user) (add more entries to test)
+[x] Page to show all transactions with filters (date, user) (add more entries to test)
 
 ## Process
 

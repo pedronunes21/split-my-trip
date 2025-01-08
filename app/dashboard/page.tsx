@@ -38,6 +38,7 @@ import { useCookies } from "next-client-cookies";
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
   const cookies = useCookies();
+  const pageSize = 10;
 
   const groups = useSWR<{ data: GroupResponse[] }, Error>(
     "/api/groups",
@@ -55,7 +56,7 @@ export default function Dashboard() {
   );
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
-    "api/expenses/history?size=10&number=1",
+    `api/expenses/history?size=${pageSize}&number=1`,
     fetcher,
     {
       revalidateOnFocus: false,
