@@ -21,6 +21,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import DeleteExpenseDialog from "./deleteExpenseDialog";
 
 type ExpenseCardProps = {
   expense_id: string;
@@ -35,6 +36,8 @@ type ExpenseCardProps = {
 
 export function ExpenseCard(props: ExpenseCardProps) {
   const [shouldFetch, setShouldFetch] = useState(false);
+  const [dialogType, setDialogType] = useState("");
+  const [dropdownDialog, setDropdownDialog] = useState(false);
   const date = new Date(props.date);
   let compactDate = "";
   const completeDate = date.toLocaleDateString("pt-BR", {
@@ -92,7 +95,7 @@ export function ExpenseCard(props: ExpenseCardProps) {
               </span>
             </div>
             <div className="flex justify-between items-start w-full gap-2">
-              <small className="text-sm text-gray-400 font-regular text-left">
+              <small className="text-sm text-gray-400 font-regular text-left overflow-hidden whitespace-nowrap text-ellipsis w-[190px]">
                 {props.description}
               </small>
               <strong className="whitespace-nowrap text-green-400">
@@ -118,19 +121,40 @@ export function ExpenseCard(props: ExpenseCardProps) {
             <div className="flex flex-col items-start justify-start w-full">
               <div className="flex justify-between items-center w-full">
                 <h4 className="text-lg font-semibold m-0">{props.user_name}</h4>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <FaEllipsis />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    {props.active_user &&
-                      props.active_user == props.created_by && (
-                        <DropdownMenuItem>Excluir</DropdownMenuItem>
-                      )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                <Dialog
+                  open={dropdownDialog}
+                  onOpenChange={(open) => setDropdownDialog(open)}
+                >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <FaEllipsis />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DialogTrigger>
+                        {props.active_user &&
+                          props.active_user == props.created_by && (
+                            <DropdownMenuItem
+                              onClick={() => setDialogType("delete")}
+                            >
+                              Excluir
+                            </DropdownMenuItem>
+                          )}
+                      </DialogTrigger>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DialogContent className="w-[calc(100%-30px)] rounded-md">
+                    {dialogType == "delete" ? (
+                      <DeleteExpenseDialog
+                        setDialog={setDropdownDialog}
+                        id={props.expense_id}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
               <span className="text-gray-400 text-sm">{completeDate}</span>
             </div>

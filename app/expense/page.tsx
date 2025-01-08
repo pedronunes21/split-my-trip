@@ -13,16 +13,17 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
-import { DialogDescription, DialogTitle } from "./ui/dialog";
 import { useCookies } from "next-client-cookies";
+import Link from "next/link";
+import { FaAngleLeft } from "react-icons/fa6";
 
-export default function ExpenseHistoryDialog() {
+export default function Page() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState([1]);
 
   const cookies = useCookies();
 
-  const pageSize = 1;
+  const pageSize = 2;
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
     `api/expenses/history?size=${pageSize}&number=${page}`,
@@ -37,7 +38,7 @@ export default function ExpenseHistoryDialog() {
   const count = expensesCount.data?.data.count;
   useEffect(() => {
     if (count) {
-      const totalSize = parseInt(count) / pageSize;
+      const totalSize = Math.floor(parseInt(count) / pageSize) + 1;
       let array = [1];
 
       if (totalSize <= 1) {
@@ -54,12 +55,21 @@ export default function ExpenseHistoryDialog() {
   if (expensesHistory.error || expensesCount.error) return <PageError />;
 
   return (
-    <main>
+    <main className="p-3">
       <div className="mb-7 flex flex-col">
-        <DialogTitle>Gastos</DialogTitle>
-        <DialogDescription>
+        <div className="relative">
+          <div className="absolute top-[50%] translate-y-[-50%] left-[20px] bg-slate-100 p-3 rounded-full">
+            <Link href="/dashboard">
+              <FaAngleLeft className="text-slate-400" />
+            </Link>
+          </div>
+          <h1 className="text-3xl text-center text-slate-700 font-semibold">
+            Gastos
+          </h1>
+        </div>
+        <span className="text-gray-400 text-sm text-center">
           Todos os gastos realizados estão listados abaixo
-        </DialogDescription>
+        </span>
       </div>
 
       <ul className="flex flex-col gap-3">
@@ -97,7 +107,9 @@ export default function ExpenseHistoryDialog() {
           })}
           <PaginationItem>
             <PaginationNext
-              onClick={() => setPage(count ? parseInt(count) / pageSize : 1)}
+              onClick={() =>
+                setPage(count ? Math.floor(parseInt(count) / pageSize) + 1 : 1)
+              }
             />
           </PaginationItem>
         </PaginationContent>

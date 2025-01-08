@@ -33,7 +33,6 @@ import LogoutDialog from "@/components/logoutDialog";
 import PageError from "@/components/pageError";
 import AccountError from "@/components/accountError";
 import ExpenseDetailsDialog from "@/components/expenseDetailsDialog";
-import ExpenseHistoryDialog from "@/components/ExpensesHistoryDialog";
 import { useCookies } from "next-client-cookies";
 
 export default function Dashboard() {
@@ -114,11 +113,6 @@ export default function Dashboard() {
                   Participantes
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() => setDialogType("expense_history")}
-                >
-                  Gastos
-                </DropdownMenuItem>
-                <DropdownMenuItem
                   onClick={() => setDialogType("expense_details")}
                 >
                   Resumo
@@ -140,8 +134,6 @@ export default function Dashboard() {
                 <LogoutDialog />
               ) : dialogType == "expense_details" ? (
                 <ExpenseDetailsDialog />
-              ) : dialogType == "expense_history" ? (
-                <ExpenseHistoryDialog />
               ) : (
                 <div></div>
               )}
@@ -160,7 +152,9 @@ export default function Dashboard() {
         <div className="flex items-center justify-between py-4">
           <div className="flex flex-col">
             <h3 className="text-lg font-semibold">Gastos recentes</h3>
-            <small>Ver todos</small>
+            <Link href="/expense">
+              <small>Ver todos</small>
+            </Link>
           </div>
           <Link
             href="/expense/create"
