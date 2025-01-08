@@ -17,6 +17,7 @@ export default function Middleware(request: NextRequest) {
   }
 
   if (
+    request.nextUrl.pathname === "/" ||
     request.nextUrl.pathname.startsWith("/group") ||
     request.nextUrl.pathname.startsWith("/invite")
   ) {

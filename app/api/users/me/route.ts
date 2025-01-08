@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     ).rows as UserResponse[];
 
     return NextResponse.json({
-      data: users[0],
+      data: users,
     });
   } catch (err) {
     console.log(err);

@@ -12,6 +12,15 @@ import useSWR from "swr";
 import fetcher from "@/lib/fetcher";
 import { ExpenseParticipants } from "@/types/responses";
 import { useState } from "react";
+import { FaEllipsis } from "react-icons/fa6";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 type ExpenseCardProps = {
   expense_id: string;
@@ -20,6 +29,8 @@ type ExpenseCardProps = {
   date: string;
   description: string;
   amount: string;
+  created_by: string;
+  active_user: string | undefined;
 };
 
 export function ExpenseCard(props: ExpenseCardProps) {
@@ -104,8 +115,23 @@ export function ExpenseCard(props: ExpenseCardProps) {
                 height={64}
               />
             </div>
-            <div className="flex flex-col items-start justify-start">
-              <h4 className="text-lg font-semibold m-0">{props.user_name}</h4>
+            <div className="flex flex-col items-start justify-start w-full">
+              <div className="flex justify-between items-center w-full">
+                <h4 className="text-lg font-semibold m-0">{props.user_name}</h4>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <FaEllipsis />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Ações</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {props.active_user &&
+                      props.active_user == props.created_by && (
+                        <DropdownMenuItem>Excluir</DropdownMenuItem>
+                      )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
               <span className="text-gray-400 text-sm">{completeDate}</span>
             </div>
           </div>

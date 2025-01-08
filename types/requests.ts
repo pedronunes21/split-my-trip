@@ -23,4 +23,5 @@ export type ExpenseRequest = {
   date: string;
   payer_id: string; // user_id
   participants: string[];
+  created_by?: string;
 };

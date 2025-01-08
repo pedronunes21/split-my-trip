@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       FROM groups
       WHERE id = ${group_id}
     `;
-    const groups = res.rows[0] as GroupResponse;
+    const groups = res.rows as GroupResponse[];
 
     return NextResponse.json({
       data: groups,

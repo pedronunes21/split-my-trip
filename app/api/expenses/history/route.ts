@@ -31,6 +31,7 @@ export async function GET(request: NextRequest) {
         e.date,
         e.payer_id,
         e.group_id,
+        e.created_by,
         json_build_object(
             'name', u.name,
             'photo_url', u.photo_url

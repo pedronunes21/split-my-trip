@@ -26,6 +26,7 @@ import { UserResponse } from "@/types/responses";
 import fetcher from "@/lib/fetcher";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useCookies } from "next-client-cookies";
 
 const schema = yup.object().shape({
   amount: yup.string().required("Informe o valor do gasto"),
@@ -45,6 +46,7 @@ export default function Page() {
   const [amount, setAmount] = useState("");
 
   const { toast } = useToast();
+  const cookies = useCookies();
 
   const {
     register,
@@ -89,6 +91,7 @@ export default function Page() {
       description,
       participants,
       payer_id,
+      created_by: cookies.get("user_id"),
     };
 
     try {

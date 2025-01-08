@@ -14,10 +14,13 @@ import {
 } from "@/components/ui/pagination";
 import { useEffect, useState } from "react";
 import { DialogDescription, DialogTitle } from "./ui/dialog";
+import { useCookies } from "next-client-cookies";
 
 export default function ExpenseHistoryDialog() {
   const [page, setPage] = useState(1);
   const [pagination, setPagination] = useState([1]);
+
+  const cookies = useCookies();
 
   const pageSize = 1;
 
@@ -70,6 +73,8 @@ export default function ExpenseHistoryDialog() {
               date={expense.date}
               description={expense.description}
               amount={expense.amount}
+              created_by={expense.created_by}
+              active_user={cookies.get("user_id")}
             />
           ))
         ) : (

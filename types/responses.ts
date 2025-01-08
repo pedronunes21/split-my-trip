@@ -44,6 +44,7 @@ export type ExpenseHistoryResponse = {
   amount: string;
   payer_id: string;
   description: string;
+  created_by: string;
   user: {
     name: string;
     photo_url: string;

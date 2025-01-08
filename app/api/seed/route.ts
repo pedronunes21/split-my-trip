@@ -64,8 +64,10 @@ export async function POST() {
         date TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
         payer_id UUID,
         group_id UUID,
+        created_by UUID,
         CONSTRAINT fk_payer FOREIGN KEY (payer_id) REFERENCES users(id),
-        CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id)
+        CONSTRAINT fk_group FOREIGN KEY (group_id) REFERENCES groups(id),
+        CONSTRAINT fK_owner FOREIGN KEY (created_by) REFERENCES users(id)
       );
     `;
 
@@ -76,7 +78,7 @@ export async function POST() {
         user_id UUID,
         amount_owed DECIMAL(10,2),
         PRIMARY KEY (expense_id, user_id),
-        CONSTRAINT fk_expense FOREIGN KEY (expense_id) REFERENCES expenses(id),
+        CONSTRAINT fk_expense FOREIGN KEY (expense_id) REFERENCES expenses(id) ON DELETE CASCADE,
         CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
       );
     `;
@@ -128,8 +130,8 @@ export async function POST() {
           // Create the expense
           const e = (
             await client.sql`
-            INSERT INTO expenses (id, amount, description, date, payer_id, group_id)
-            VALUES (${expense.id}, ${expense.amount}, ${expense.description}, ${expense.date}, ${expense.payer_id}, ${group_id})
+            INSERT INTO expenses (id, amount, description, date, payer_id, group_id, created_by)
+            VALUES (${expense.id}, ${expense.amount}, ${expense.description}, ${expense.date}, ${expense.payer_id}, ${group_id}, ${expense.created_by})
             RETURNING id, amount;
           `
           ).rows[0];

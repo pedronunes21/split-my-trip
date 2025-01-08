@@ -34,20 +34,26 @@ import PageError from "@/components/pageError";
 import AccountError from "@/components/accountError";
 import ExpenseDetailsDialog from "@/components/expenseDetailsDialog";
 import ExpenseHistoryDialog from "@/components/ExpensesHistoryDialog";
+import { useCookies } from "next-client-cookies";
 
 export default function Dashboard() {
   const [dialogType, setDialogType] = useState("");
+  const cookies = useCookies();
 
-  const groups = useSWR<{ data: GroupResponse }, Error>(
+  const groups = useSWR<{ data: GroupResponse[] }, Error>(
     "/api/groups",
     fetcher,
     {
       revalidateOnFocus: false,
     }
   );
-  const user = useSWR<{ data: UserResponse }, Error>("/api/users/me", fetcher, {
-    revalidateOnFocus: false,
-  });
+  const user = useSWR<{ data: UserResponse[] }, Error>(
+    "/api/users/me",
+    fetcher,
+    {
+      revalidateOnFocus: false,
+    }
+  );
 
   const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
     "api/expenses/history?size=10&number=1",
@@ -78,7 +84,7 @@ export default function Dashboard() {
   if (
     !groups.isLoading &&
     !user.isLoading &&
-    (!groups.data.data || !user.data?.data)
+    (!groups.data.data.length || !user.data?.data.length)
   )
     return <AccountError />;
 
@@ -89,7 +95,7 @@ export default function Dashboard() {
           <DropdownMenu>
             <div className="flex justify-between items-center w-full">
               <h3 className="text-2xl font-semibold">
-                {groups.data.data.title}
+                {groups.data.data[0].title}
               </h3>
               <DropdownMenuTrigger className="bg-gray-200 rounded-sm h-9 w-9 flex items-center justify-center">
                 <FaBarsStaggered className="text-gray-500" size={18} />
@@ -147,8 +153,8 @@ export default function Dashboard() {
         balance={expensesOverview.data?.data.balance}
         debt={expensesOverview.data?.data.debt}
         surplus={expensesOverview.data?.data.surplus}
-        group_photo={groups.data.data.photo_url}
-        user_photo={user.data?.data.photo_url}
+        group_photo={groups.data.data[0].photo_url}
+        user_photo={user.data?.data[0].photo_url}
       />
       <div>
         <div className="flex items-center justify-between py-4">
@@ -174,6 +180,8 @@ export default function Dashboard() {
                 date={expense.date}
                 description={expense.description}
                 amount={expense.amount}
+                created_by={expense.created_by}
+                active_user={cookies.get("user_id")}
               />
             ))
           ) : (

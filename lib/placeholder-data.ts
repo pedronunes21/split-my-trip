@@ -27,6 +27,7 @@ const placeholderGroups = [
         description: "Almoço no restaurante",
         date: new Date().toISOString(),
         payer_id: "0140e285-858b-44c7-8e94-1f5a8f2d3bb0",
+        created_by: "0140e285-858b-44c7-8e94-1f5a8f2d3bb0",
         participants: [
           {
             user_id: "0140e285-858b-44c7-8e94-1f5a8f2d3bb0",
@@ -45,6 +46,7 @@ const placeholderGroups = [
         description: "Pás para cavar",
         date: new Date().toISOString(),
         payer_id: "1a88e4d4-c904-4d13-9966-dcb32aad8c3f",
+        created_by: "1a88e4d4-c904-4d13-9966-dcb32aad8c3f",
         participants: [
           {
             user_id: "0140e285-858b-44c7-8e94-1f5a8f2d3bb0",
