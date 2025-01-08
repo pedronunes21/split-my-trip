@@ -2,8 +2,6 @@ import { ExpensesDetailsResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
   const user_id = request.cookies.get("user_id")?.value;
@@ -16,6 +14,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const client = await db.connect();
     const expensesDetails = (
       await client.sql`
         SELECT 

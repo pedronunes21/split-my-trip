@@ -3,10 +3,9 @@ import { GroupResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
   try {
+    const client = await db.connect();
     const group_id = request.cookies.get("group_id")?.value;
 
     if (!group_id) {
@@ -33,6 +32,7 @@ export async function POST(request: Request) {
   const { title, photo_url, user }: GroupRequest = await request.json();
 
   try {
+    const client = await db.connect();
     const g = await client.sql`
       WITH new_group AS (
         INSERT INTO groups (title, photo_url)

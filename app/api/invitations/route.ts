@@ -2,8 +2,6 @@ import { InvitationResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
 
@@ -12,6 +10,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const client = await db.connect();
     const res = (
       await client.sql`
       SELECT invite_code
@@ -52,6 +51,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const client = await db.connect();
     await client.sql`
       DELETE FROM invitations
       WHERE group_id = ${group_id}

@@ -2,8 +2,6 @@ import { ExpenseHistoryResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
   const pageSizeParam = request.nextUrl.searchParams.get("size");
@@ -23,6 +21,7 @@ export async function GET(request: NextRequest) {
   const offset = (pageNumber - 1) * pageSize;
 
   try {
+    const client = await db.connect();
     const expenses = (
       await client.sql`
       SELECT 

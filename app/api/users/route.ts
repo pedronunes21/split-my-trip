@@ -3,8 +3,6 @@ import { InvitationResponse, UserResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
-const client = await db.connect();
-
 export async function GET(request: NextRequest) {
   const group_id = request.cookies.get("group_id")?.value;
 
@@ -13,6 +11,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const client = await db.connect();
     const users = (
       await client.sql`
       SELECT *
@@ -34,6 +33,7 @@ export async function POST(request: NextRequest) {
   const { name, photo_url, invite_code }: UserRequest = await request.json();
 
   try {
+    const client = await db.connect();
     const invitation = (
       await client.sql`
       SELECT group_id
@@ -83,6 +83,7 @@ export async function POST(request: NextRequest) {
 }
 
 export async function DELETE(request: NextRequest) {
+  const client = await db.connect();
   const user_id = request.cookies.get("user_id")?.value;
 
   if (!user_id) {

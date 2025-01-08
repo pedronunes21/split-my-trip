@@ -35,7 +35,6 @@ Fix:
 [x] Screen to show how much you owe to whom
 [] Delete expense if was created by you (add created by in expense table)
 [x] Pagination
-[] Filters in expense history dialog
 [] Add button with set state in recent transactions
 [] Page to show all transactions with filters (date, user)
 [] Change from localhost to domain in invite link
