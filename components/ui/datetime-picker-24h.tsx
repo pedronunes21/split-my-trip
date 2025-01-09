@@ -55,7 +55,7 @@ export function DateTimePicker24h(props: DateTimePicker24hProps) {
         >
           <FaCalendar className="mr-2 h-4 w-4" />
           {date ? (
-            format(date, "dd/MM/yyyy hh:mm")
+            format(date, "dd/MM/yyyy H:mm")
           ) : (
             <span>DD/MM/AAAA hh:mm</span>
           )}

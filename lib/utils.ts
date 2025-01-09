@@ -10,7 +10,7 @@ export function moneyMask(value: string) {
 
   const options = { minimumFractionDigits: 2 };
   const result = new Intl.NumberFormat("pt-BR", options).format(
-    parseFloat(value) / 100
+    isNaN(parseFloat(value) / 100) ? 0.0 : parseFloat(value) / 100
   );
 
   return result;
