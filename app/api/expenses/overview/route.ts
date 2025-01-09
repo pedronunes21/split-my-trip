@@ -1,3 +1,4 @@
+import { ExpensesOverviewResponse } from "@/types/responses";
 import { db } from "@vercel/postgres";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -16,70 +17,45 @@ export async function GET(request: NextRequest) {
 
   try {
     const client = await db.connect();
-    let expensesOverview;
 
-    if (!paramForUser) {
-      expensesOverview = (
-        await client.sql`
-          SELECT
-            u.id AS user_id,
-            u.name AS user_name,
-            COALESCE(SUM(
-                CASE
-                    WHEN e.payer_id = u.id THEN 0
-                    ELSE ep.amount_owed 
-                    END
-            ), 0) AS debt,
-            COALESCE(SUM(
-                CASE 
-                    WHEN e.payer_id = u.id AND ep.user_id = u.id THEN e.amount - ep.amount_owed
-                    WHEN e.payer_id = u.id THEN e.amount
-                    ELSE 0 
-                    END
-                ), 0) AS surplus,
-            COALESCE(SUM(CASE WHEN e.payer_id = u.id THEN e.amount ELSE 0 END), 0) - COALESCE(SUM(ep.amount_owed), 0) AS balance
-          FROM users u
-          LEFT JOIN expenses_participants ep ON u.id = ep.user_id
-          LEFT JOIN expenses e ON ep.expense_id = e.id
-          WHERE u.group_id = ${group_id}
-          GROUP BY u.id;
-      `
-      ).rows;
+    const queryParams: (string | number)[] = [group_id];
+    let query = `
+      SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        COALESCE(ep_debt.total_debt, 0) AS debt,
+        COALESCE(e_surplus.total_surplus, 0) AS surplus,
+        COALESCE(e_surplus.total_surplus - ep_debt.total_debt, 0) AS balance
+      FROM users u
+      LEFT JOIN (
+          SELECT 
+              ep.user_id,
+              SUM(ep.amount_owed) AS total_debt
+          FROM expenses_participants ep
+          GROUP BY ep.user_id
+      ) ep_debt ON ep_debt.user_id = u.id
+      LEFT JOIN (
+          SELECT 
+              e.payer_id,
+              SUM(e.amount) AS total_surplus
+          FROM expenses e
+          GROUP BY e.payer_id
+      ) e_surplus ON e_surplus.payer_id = u.id
+      WHERE u.group_id = $${queryParams.length}
+    `;
 
-      return NextResponse.json({
-        data: expensesOverview,
-      });
-    } else {
-      expensesOverview = (
-        await client.sql`
-          SELECT
-            u.id AS user_id,
-            u.name AS user_name,
-            COALESCE(SUM(
-                CASE
-                    WHEN e.payer_id = u.id THEN 0
-                    ELSE ep.amount_owed 
-                    END
-            ), 0) AS debt,
-            COALESCE(SUM(
-                CASE 
-                    WHEN e.payer_id = u.id AND ep.user_id = u.id THEN e.amount - ep.amount_owed
-                    WHEN e.payer_id = u.id THEN e.amount
-                    ELSE 0 
-                    END
-                ), 0) AS surplus,
-            COALESCE(SUM(CASE WHEN e.payer_id = u.id THEN e.amount ELSE 0 END), 0) - COALESCE(SUM(ep.amount_owed), 0) AS balance
-          FROM users u
-          LEFT JOIN expenses_participants ep ON u.id = ep.user_id
-          LEFT JOIN expenses e ON ep.expense_id = e.id
-          WHERE u.group_id = ${group_id} AND u.id = ${user_id}
-          GROUP BY u.id;
-      `
-      ).rows[0];
-      return NextResponse.json({
-        data: expensesOverview,
-      });
+    if (paramForUser) {
+      queryParams.push(user_id);
+      query += ` AND u.id = $${queryParams.length}`;
     }
+
+    const result = await client.query(query, queryParams);
+
+    const expenses = result.rows as ExpensesOverviewResponse[];
+
+    return NextResponse.json({
+      data: expenses,
+    });
   } catch (err) {
     console.error(err);
     throw new Error("Something went wrong! Try again later.");

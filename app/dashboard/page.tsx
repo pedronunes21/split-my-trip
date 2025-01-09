@@ -63,7 +63,7 @@ export default function Dashboard() {
     }
   );
 
-  const expensesOverview = useSWR<{ data: ExpensesOverviewResponse }, Error>(
+  const expensesOverview = useSWR<{ data: ExpensesOverviewResponse[] }, Error>(
     "api/expenses/overview?me=true",
     fetcher,
     {
@@ -143,9 +143,9 @@ export default function Dashboard() {
         </Dialog>
       </div>
       <ExpensesOverview
-        balance={expensesOverview.data?.data.balance}
-        debt={expensesOverview.data?.data.debt}
-        surplus={expensesOverview.data?.data.surplus}
+        balance={expensesOverview.data?.data[0].balance}
+        debt={expensesOverview.data?.data[0].debt}
+        surplus={expensesOverview.data?.data[0].surplus}
         group_photo={groups.data.data[0].photo_url}
         user_photo={user.data?.data[0].photo_url}
       />

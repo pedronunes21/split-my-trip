@@ -27,6 +27,8 @@ import fetcher from "@/lib/fetcher";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useCookies } from "next-client-cookies";
+import Link from "next/link";
+import { FaAngleLeft } from "react-icons/fa6";
 
 const schema = yup.object().shape({
   amount: yup.string().required("Informe o valor do gasto"),
@@ -134,7 +136,16 @@ export default function Page() {
   return (
     <main className="p-3">
       <div className="mb-7">
-        <h1 className="text-3xl text-center">Cadastrar um Gasto</h1>
+        <div className="relative">
+          <div className="absolute top-[50%] translate-y-[-50%] left-[10px] bg-slate-100 p-3 rounded-full">
+            <Link href="/dashboard">
+              <FaAngleLeft className="text-slate-400" />
+            </Link>
+          </div>
+          <h1 className="text-2xl text-center text-slate-700 font-semibold">
+            Cadatrar um gasto
+          </h1>
+        </div>
         <span className="text-gray-400 text-sm text-center">
           Preencha os campos abaixo para cadastrar um gasto
         </span>

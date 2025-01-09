@@ -20,7 +20,7 @@ export default function InviteDialog() {
   function writeToClipboard(text: string) {
     navigator.clipboard.writeText(text);
     toast({
-      title: "Texto copiado!",
+      title: "Link de convite copiado!",
       duration: 1500,
     });
   }
@@ -77,15 +77,15 @@ export default function InviteDialog() {
         )}
       </div>
       {invitation.data ? (
-        <div className="flex items-center justify-between">
-          <span className="text-md underline underline-offset-4 text-gray-300">
-            {inviteLink}
+        <div className="flex items-center justify-center">
+          <span className="text-md underline underline-offset-4 text-gray-400">
+            {invitation.data ? invitation.data.data.invite_code : ""}
           </span>
           <button
             onClick={() => writeToClipboard(inviteLink)}
             className="h-6 w-6 flex items-center justify-center rounded-sm"
           >
-            <FaClipboard className="text-gray-500" />
+            <FaClipboard className="text-gray-400" />
           </button>
         </div>
       ) : (

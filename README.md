@@ -38,8 +38,11 @@ Fix:
 [x] Check for invalid cookies loop
 [x] Change from localhost to domain in invite link
 [x] Redirect from "/" if is logged in
-[] Home page
 [x] Page to show all transactions with filters (date, user) (add more entries to test)
+[x] Qrcode torto
+[x] Seta para voltar nas expenses
+[] Problema no banco ainda
+[] Home page
 
 ## Process
 
