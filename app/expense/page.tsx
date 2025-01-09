@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import { useCookies } from "next-client-cookies";
 import Link from "next/link";
-import { FaAngleLeft } from "react-icons/fa6";
+import { FaAngleLeft, FaArrowsRotate } from "react-icons/fa6";
 import { DatePickerWithRange } from "@/components/ui/datePickerWithRange";
 import { DateRange } from "react-day-picker";
 import {
@@ -77,6 +77,11 @@ export default function Page() {
     }
   }, [page, count]);
 
+  const resetFilters = () => {
+    setDate(undefined);
+    setPayer("");
+  };
+
   if (expensesHistory.error || participants.error) return <PageError />;
 
   return (
@@ -97,7 +102,12 @@ export default function Page() {
         </span>
       </div>
       <div>
-        <span>Filtrar por:</span>
+        <div className="flex py-2 items-center w-full justify-between">
+          <span>Filtrar por:</span>
+          <button onClick={resetFilters}>
+            <FaArrowsRotate className="text-slate-500" />
+          </button>
+        </div>
         <div className="flex items-center gap-3">
           <Select onValueChange={(value) => setPayer(value)} value={payer}>
             <SelectTrigger>
@@ -115,7 +125,7 @@ export default function Page() {
           </Select>
         </div>
         <div>
-          <DatePickerWithRange setDate={setDate} />
+          <DatePickerWithRange date={date} setDate={setDate} />
         </div>
       </div>
       <ul className="flex flex-col gap-3">

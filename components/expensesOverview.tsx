@@ -31,7 +31,9 @@ export default function ExpensesOverview(props: ExpensesOverviewProps) {
         </div>
         <div>
           <div className="flex flex-col">
-            <span className="text-sm font-regular text-gray-200">Total</span>
+            <span className="text-sm font-regular text-gray-200">
+              À receber
+            </span>
             {props.balance ? (
               <strong className="text-3xl font-semibold text-white">
                 R$ {parseFloat(props.balance).toFixed(2).replace(".", ",")}
@@ -54,7 +56,7 @@ export default function ExpensesOverview(props: ExpensesOverviewProps) {
 
             {props.surplus ? (
               <span className="text-green-300">
-                À receber{" "}
+                Você pagou{" "}
                 <strong>
                   R$ {parseFloat(props.surplus).toFixed(2).replace(".", ",")}
                 </strong>

@@ -14,11 +14,13 @@ import {
 } from "@/components/ui/popover";
 
 type DatePickerWithRangeProps = {
+  date: DateRange | undefined;
   setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
 };
 
 export function DatePickerWithRange({
   className,
+  date,
   setDate,
 }: React.HTMLAttributes<HTMLDivElement> & DatePickerWithRangeProps) {
   const [inDate, setInDate] = React.useState<DateRange | undefined>();
@@ -26,6 +28,10 @@ export function DatePickerWithRange({
   const onOpenChange = (open: boolean) => {
     if (!open) setDate(inDate);
   };
+
+  React.useEffect(() => {
+    setInDate(date);
+  }, [date]);
 
   return (
     <div className={cn("grid gap-2", className)}>

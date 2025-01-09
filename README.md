@@ -41,8 +41,10 @@ Fix:
 [x] Page to show all transactions with filters (date, user) (add more entries to test)
 [x] Qrcode torto
 [x] Seta para voltar nas expenses
-[] Problema no banco ainda
-[] Home page
+[x] Add clean filters button on expenses page
+[x] Home page
+[] Create a header and a logo
+[] There is still problems with the db
 
 ## Process
 
