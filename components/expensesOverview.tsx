@@ -31,12 +31,14 @@ export default function ExpensesOverview(props: ExpensesOverviewProps) {
         </div>
         <div>
           <div className="flex flex-col">
-            <span className="text-sm font-regular text-gray-200">
-              À receber
-            </span>
-            {props.balance ? (
+            <span className="text-sm font-regular text-gray-200">Total</span>
+            {props.debt && props.surplus ? (
               <strong className="text-3xl font-semibold text-white">
-                R$ {parseFloat(props.balance).toFixed(2).replace(".", ",")}
+                {/* R$ {parseFloat(props.balance).toFixed(2).replace(".", ",")} */}
+                R${" "}
+                {(parseFloat(props.surplus) - parseFloat(props.debt))
+                  .toFixed(2)
+                  .replace(".", ",")}
               </strong>
             ) : (
               <Skeleton className="h-6 w-8" />
