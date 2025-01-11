@@ -167,7 +167,7 @@ export function ExpenseCard(props: ExpenseCardProps) {
             <ul className="flex flex-col items-start gap-2 pl-4">
               {participants.data ? (
                 participants.data.data.map((p) => (
-                  <li key={p.user_id} className="flex items-center gap-2">
+                  <li key={p.user_id} className="flex items-start gap-2 w-full">
                     <Image
                       className="h-6 w-6 rounded-full"
                       src={p.user_photo}
@@ -175,16 +175,18 @@ export function ExpenseCard(props: ExpenseCardProps) {
                       width={32}
                       height={32}
                     />
-                    <span>{p.user_name}</span>
-                    <small>
-                      R${" "}
-                      {(
-                        parseFloat(props.amount) /
-                        participants.data!.data.length
-                      )
-                        .toFixed(2)
-                        .replace(".", ",")}
-                    </small>
+                    <div className="flex justify-between w-full">
+                      <span className="text-left">{p.user_name}</span>
+                      <small className="whitespace-nowrap">
+                        R${" "}
+                        {(
+                          parseFloat(props.amount) /
+                          participants.data!.data.length
+                        )
+                          .toFixed(2)
+                          .replace(".", ",")}
+                      </small>
+                    </div>
                   </li>
                 ))
               ) : (

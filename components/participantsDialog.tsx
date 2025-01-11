@@ -20,7 +20,7 @@ export default function ParticipantsDialog() {
       {participants.data ? (
         <div className="flex flex-col gap-2 pt-3">
           {participants.data.data.map((p) => (
-            <li key={p.id} className="flex items-center gap-2">
+            <li key={p.id} className="flex items-start gap-2">
               <Image
                 className="h-8 w-8 rounded-full"
                 src={p.photo_url}
@@ -28,7 +28,7 @@ export default function ParticipantsDialog() {
                 width={32}
                 height={32}
               />
-              <span>{p.name}</span>
+              <span className="text-left">{p.name}</span>
             </li>
           ))}
         </div>
