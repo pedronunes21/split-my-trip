@@ -45,9 +45,9 @@ export default function ExpenseDetailsDialog() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Devedor</TableHead>
+                <TableHead>Devedor</TableHead>
                 <TableHead className="text-center">Pagador</TableHead>
-                <TableHead className="text-right">Valor</TableHead>
+                <TableHead className="text-right w-[100px]">Valor</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -60,7 +60,7 @@ export default function ExpenseDetailsDialog() {
                     <TableCell className="text-center">
                       {e.payer.name}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right whitespace-nowrap">
                       R$ {moneyMask(e.amount_owed)}
                     </TableCell>
                   </TableRow>
@@ -75,9 +75,9 @@ export default function ExpenseDetailsDialog() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Devedor</TableHead>
+                <TableHead>Devedor</TableHead>
                 <TableHead className="text-center">Pagador</TableHead>
-                <TableHead className="text-right">Valor</TableHead>
+                <TableHead className="text-right w-[100px]">Valor</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -90,7 +90,7 @@ export default function ExpenseDetailsDialog() {
                     <TableCell className="text-center">
                       {e.payer.name}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="text-right whitespace-nowrap">
                       R$ {moneyMask(e.amount_owed)}
                     </TableCell>
                   </TableRow>
