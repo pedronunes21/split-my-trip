@@ -42,64 +42,68 @@ export default function ExpenseDetailsDialog() {
           <TabsTrigger value="all">Do grupo</TabsTrigger>
         </TabsList>
         <TabsContent value="me">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Devedor</TableHead>
-                <TableHead className="text-center">Pagador</TableHead>
-                <TableHead className="text-right w-[100px]">Valor</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {me.data ? (
-                me.data.data.map((e, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium text-left">
-                      {e.ower.name}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {e.payer.name}
-                    </TableCell>
-                    <TableCell className="text-right whitespace-nowrap">
-                      R$ {moneyMask(e.amount_owed)}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <RowSkeleton />
-              )}
-            </TableBody>
-          </Table>
+          <div className="relative h-96 overflow-auto">
+            <Table>
+              <TableHeader className="sticky top-[-2px] bg-background">
+                <TableRow>
+                  <TableHead>Devedor</TableHead>
+                  <TableHead className="text-center">Pagador</TableHead>
+                  <TableHead className="text-right w-[100px]">Valor</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {me.data ? (
+                  me.data.data.map((e, i) => (
+                    <TableRow key={i}>
+                      <TableCell className="font-medium text-left">
+                        {e.ower.name}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {e.payer.name}
+                      </TableCell>
+                      <TableCell className="text-right whitespace-nowrap">
+                        R$ {moneyMask(e.amount_owed)}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <RowSkeleton />
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </TabsContent>
         <TabsContent value="all">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Devedor</TableHead>
-                <TableHead className="text-center">Pagador</TableHead>
-                <TableHead className="text-right w-[100px]">Valor</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {all.data ? (
-                all.data.data.map((e, i) => (
-                  <TableRow key={i}>
-                    <TableCell className="font-medium text-left">
-                      {e.ower.name}
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {e.payer.name}
-                    </TableCell>
-                    <TableCell className="text-right whitespace-nowrap">
-                      R$ {moneyMask(e.amount_owed)}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <RowSkeleton />
-              )}
-            </TableBody>
-          </Table>
+          <div className="relative h-96 overflow-auto">
+            <Table>
+              <TableHeader className="sticky top-[-2px] bg-background">
+                <TableRow>
+                  <TableHead>Devedor</TableHead>
+                  <TableHead className="text-center">Pagador</TableHead>
+                  <TableHead className="text-right w-[100px]">Valor</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {all.data ? (
+                  all.data.data.map((e, i) => (
+                    <TableRow key={i}>
+                      <TableCell className="font-medium text-left">
+                        {e.ower.name}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {e.payer.name}
+                      </TableCell>
+                      <TableCell className="text-right whitespace-nowrap">
+                        R$ {moneyMask(e.amount_owed)}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <RowSkeleton />
+                )}
+              </TableBody>
+            </Table>
+          </div>
         </TabsContent>
       </Tabs>
     </main>
