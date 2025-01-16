@@ -89,7 +89,9 @@ export function ExpenseCard(props: ExpenseCardProps) {
           </div>
           <div className="w-full">
             <div className="flex justify-between items-start">
-              <h4 className="text-lg font-semibold m-0">{props.user_name}</h4>
+              <h4 className="text-lg font-semibold m-0 text-left">
+                {props.user_name}
+              </h4>
               <span className="text-md text-gray-400 font-medium">
                 {compactDate}
               </span>
@@ -164,7 +166,7 @@ export function ExpenseCard(props: ExpenseCardProps) {
           </DialogDescription>
           <div className="flex items-start flex-col gap-3">
             <h5>Participantes</h5>
-            <ul className="flex flex-col items-start gap-2 pl-4">
+            <ul className="flex flex-col items-start gap-2 pl-4 w-full">
               {participants.data ? (
                 participants.data.data.map((p) => (
                   <li key={p.user_id} className="flex items-start gap-2 w-full">
