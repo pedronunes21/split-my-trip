@@ -65,9 +65,8 @@ export default function Page() {
 
   const count = expensesHistory.data?.count;
   useEffect(() => {
-    console.log(count);
     if (!!count) {
-      const totalSize = Math.floor(parseInt(count) / pageSize);
+      const totalSize = Math.ceil(parseInt(count) / pageSize);
       let array = [1];
 
       if (totalSize <= 1) {
@@ -179,8 +178,8 @@ export default function Page() {
             <PaginationNext
               onClick={() =>
                 setPage(
-                  count && Math.floor(parseInt(count) / pageSize) > 1
-                    ? Math.floor(parseInt(count) / pageSize)
+                  count && Math.ceil(parseInt(count) / pageSize) > 1
+                    ? Math.ceil(parseInt(count) / pageSize)
                     : 1
                 )
               }
