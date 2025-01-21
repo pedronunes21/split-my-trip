@@ -41,7 +41,10 @@ export default function Page() {
     fetcher
   );
 
-  const expensesHistory = useSWR<{ data: ExpenseHistoryResponse[] }, Error>(
+  const expensesHistory = useSWR<
+    { data: ExpenseHistoryResponse[]; count: string },
+    Error
+  >(
     `api/expenses/history?size=${pageSize}&number=${page}${
       date
         ? !date.to && date.from
@@ -60,10 +63,11 @@ export default function Page() {
     fetcher
   );
 
-  const count = expensesHistory.data?.data.length;
+  const count = expensesHistory.data?.count;
   useEffect(() => {
-    if (count) {
-      const totalSize = Math.floor(count / pageSize) + 1;
+    console.log(count);
+    if (!!count) {
+      const totalSize = Math.floor(parseInt(count) / pageSize);
       let array = [1];
 
       if (totalSize <= 1) {
@@ -76,6 +80,10 @@ export default function Page() {
       setPagination(array);
     }
   }, [page, count]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [payer, date]);
 
   const resetFilters = () => {
     setDate(undefined);
@@ -170,7 +178,11 @@ export default function Page() {
           <PaginationItem>
             <PaginationNext
               onClick={() =>
-                setPage(count ? Math.floor(count / pageSize) + 1 : 1)
+                setPage(
+                  count && Math.floor(parseInt(count) / pageSize) > 1
+                    ? Math.floor(parseInt(count) / pageSize)
+                    : 1
+                )
               }
             />
           </PaginationItem>

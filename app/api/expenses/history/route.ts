@@ -26,6 +26,13 @@ export async function GET(request: NextRequest) {
   try {
     const client = await db.connect();
     const queryParams: (string | number)[] = [group_id];
+
+    let countQuery = `
+      SELECT COUNT(e.id)
+      FROM expenses e
+      WHERE e.group_id = $${queryParams.length}
+    `;
+
     let query = `
       SELECT 
         e.id,
@@ -46,15 +53,21 @@ export async function GET(request: NextRequest) {
 
     if (from && to) {
       queryParams.push(from);
+      countQuery += ` AND e.date > $${queryParams.length}`;
       query += ` AND e.date > $${queryParams.length}`;
+
       queryParams.push(to);
+      countQuery += ` AND e.date < $${queryParams.length}`;
       query += ` AND e.date < $${queryParams.length}`;
     }
 
     if (payer) {
       queryParams.push(payer);
+      countQuery += ` AND e.payer_id = $${queryParams.length}`;
       query += ` AND e.payer_id = $${queryParams.length}`;
     }
+
+    const count = await client.query(countQuery, queryParams);
 
     queryParams.push(pageSize);
     query += `
@@ -74,6 +87,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       data: expenses,
+      count: count.rows[0].count,
     });
   } catch (err) {
     console.log(err);
